@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viu internet — Controle de Vestuário</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg-secondary: #f5f5f4; --bg-tertiary: #efefed;
+    --text: #1a1a18; --text-secondary: #6b6b67; --text-muted: #9b9b97;
+    --border: rgba(0,0,0,0.12); --border-md: rgba(0,0,0,0.22);
+    --blue: #185FA5; --blue-bg: #E6F1FB; --blue-text: #0C447C;
+    --green: #3B6D11; --green-bg: #EAF3DE; --green-text: #27500A;
+    --amber-bg: #FAEEDA; --amber-text: #633806;
+    --red: #A32D2D; --red-bg: #FCEBEB; --red-text: #791F1F;
+    --radius: 8px; --radius-lg: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a; --bg-secondary: #252523; --bg-tertiary: #2e2e2b;
+      --text: #f0efe8; --text-secondary: #a8a89f; --text-muted: #6b6b62;
+      --border: rgba(255,255,255,0.10); --border-md: rgba(255,255,255,0.20);
+      --blue: #378ADD; --blue-bg: #042C53; --blue-text: #85B7EB;
+      --green: #639922; --green-bg: #173404; --green-text: #C0DD97;
+      --amber-bg: #412402; --amber-text: #FAC775;
+      --red: #E24B4A; --red-bg: #501313; --red-text: #F7C1C1;
+    }
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg-tertiary); color: var(--text); font-size: 15px; line-height: 1.5; min-height: 100vh; }
+
+  /* ── SPLASH ── */
+  .splash { position: fixed; inset: 0; background: var(--bg-tertiary); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 16px; transition: opacity 0.3s; }
+  .splash.hidden { opacity: 0; pointer-events: none; }
+  .splash-logo { width: 56px; height: 56px; border-radius: 14px; background: var(--blue); display: flex; align-items: center; justify-content: center; }
+  .splash-logo i { color: #E6F1FB; font-size: 28px; }
+  .splash p { font-size: 13px; color: var(--text-secondary); }
+  .spinner { width: 24px; height: 24px; border: 2.5px solid var(--border-md); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── LOGIN ── */
+  .login-screen { position: fixed; inset: 0; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 1rem; }
+  .login-screen.hidden { display: none; }
+  .login-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; width: 380px; max-width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.10); }
+  .login-logo { width: 48px; height: 48px; border-radius: 12px; background: var(--blue); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; }
+  .login-logo i { color: #E6F1FB; font-size: 24px; }
+  .login-title { font-size: 20px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .login-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.5rem; }
+  .login-field { margin-bottom: 14px; }
+  .login-field label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 5px; }
+  .login-field input { width: 100%; padding: 9px 12px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: var(--bg); color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.15s; }
+  .login-field input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
+  .login-error { font-size: 12px; color: var(--red-text); background: var(--red-bg); border-radius: var(--radius); padding: 8px 12px; margin-bottom: 14px; display: none; }
+  .login-error.show { display: block; }
+  .btn-login { width: 100%; padding: 10px; border-radius: var(--radius); border: none; background: var(--blue); color: #E6F1FB; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 4px; }
+  .btn-login:hover { opacity: 0.88; }
+  .btn-login:disabled { opacity: 0.5; pointer-events: none; }
+  .login-footer { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 1.25rem; }
+
+  /* ── APP ── */
+  .app-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
+  .app-wrapper.hidden { display: none; }
+  .topbar { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 50; gap: 12px; }
+  .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .logo { width: 34px; height: 34px; border-radius: var(--radius); background: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .logo i { color: #E6F1FB; font-size: 18px; }
+  .app-title { font-size: 16px; font-weight: 600; color: var(--text); white-space: nowrap; }
+  .app-sub { font-size: 11px; color: var(--text-secondary); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .user-chip { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); padding: 4px 10px; border-radius: 999px; background: var(--bg-secondary); border: 0.5px solid var(--border); max-width: 180px; overflow: hidden; }
+  .user-chip i { flex-shrink: 0; font-size: 14px; }
+  .user-email { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .btn-logout { padding: 5px 10px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: transparent; font-size: 12px; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.15s; white-space: nowrap; }
+  .btn-logout:hover { background: var(--red-bg); color: var(--red-text); border-color: var(--red); }
+  .sync-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 3px 9px; border-radius: 999px; background: var(--green-bg); color: var(--green-text); font-weight: 500; transition: background 0.3s, color 0.3s; white-space: nowrap; }
+  .sync-badge.syncing { background: var(--amber-bg); color: var(--amber-text); }
+  .sync-badge.error { background: var(--red-bg); color: var(--red-text); }
+  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  .sync-badge.syncing .sync-dot { animation: pulse 0.8s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .nav { display: flex; gap: 4px; }
+  .nav-btn { padding: 6px 14px; border-radius: var(--radius); border: 0.5px solid transparent; background: transparent; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
+  .nav-btn:hover:not(.active) { background: var(--bg-secondary); color: var(--text); }
+  .nav-btn.active { background: var(--blue-bg); color: var(--blue-text); border-color: rgba(24,95,165,0.2); font-weight: 500; }
+  .main { flex: 1; padding: 1.5rem; max-width: 960px; margin: 0 auto; width: 100%; }
+  .section { display: none; }
+  .section.visible { display: block; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  .stat { background: var(--bg); border-radius: var(--radius); padding: 14px 16px; border: 0.5px solid var(--border); }
+  .stat-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-val { font-size: 26px; font-weight: 600; color: var(--text); }
+  .emp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .emp-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+  .emp-card:hover { border-color: var(--border-md); box-shadow: var(--shadow); }
+  .emp-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--blue-bg); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; color: var(--blue-text); margin-bottom: 10px; }
+  .emp-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .emp-role { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 999px; }
+  .badge-ok { background: var(--green-bg); color: var(--green-text); }
+  .badge-warn { background: var(--amber-bg); color: var(--amber-text); }
+  .emp-actions { display: flex; gap: 6px; margin-top: 10px; }
+  .btn { padding: 7px 14px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: transparent; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .btn:hover { background: var(--bg-secondary); color: var(--text); }
+  .btn:disabled { opacity: 0.45; pointer-events: none; }
+  .btn-primary { background: var(--blue); border-color: var(--blue); color: #E6F1FB; font-weight: 500; }
+  .btn-primary:hover { opacity: 0.88; background: var(--blue); color: #E6F1FB; }
+  .btn-danger { border-color: var(--red); color: var(--red-text); }
+  .btn-danger:hover { background: var(--red-bg); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .btn-icon { padding: 6px; border: none; background: transparent; cursor: pointer; color: var(--text-secondary); border-radius: var(--radius); }
+  .btn-icon:hover { background: var(--bg-secondary); }
+  .toolbar { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; }
+  .toolbar input { flex: 1; }
+  input[type=text], input[type=tel], input[type=email], input[type=password], select { width: 100%; padding: 7px 10px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: var(--bg); color: var(--text); font-size: 13px; font-family: inherit; transition: border-color 0.15s; outline: none; }
+  input:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
+  select { cursor: pointer; }
+  label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 5px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-row { margin-bottom: 0; }
+  .col-full { grid-column: 1 / -1; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 1rem; }
+  .modal-overlay.hidden { display: none; }
+  .modal { background: var(--bg); border-radius: var(--radius-lg); border: 0.5px solid var(--border); padding: 1.25rem; width: 500px; max-width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.18); }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 12px; }
+  .modal-title { font-size: 16px; font-weight: 500; color: var(--text); }
+  .modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; padding-top: 1rem; border-top: 0.5px solid var(--border); }
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
+  .vest-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+  .vest-item:last-child { border-bottom: none; }
+  .vest-icon { width: 34px; height: 34px; border-radius: var(--radius); background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .vest-icon i { font-size: 16px; color: var(--text-secondary); }
+  .vest-info { flex: 1; min-width: 0; }
+  .vest-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .vest-size { font-size: 11px; color: var(--text-secondary); margin-top: 2px; display: flex; align-items: center; gap: 4px; }
+  .vest-size select { font-size: 11px; padding: 2px 6px; width: auto; }
+  .qty-ctrl { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .qty-btn { width: 26px; height: 26px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: transparent; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: background 0.1s; }
+  .qty-btn:hover { background: var(--bg-secondary); color: var(--text); }
+  .qty-val { min-width: 24px; text-align: center; font-size: 14px; font-weight: 500; color: var(--text); }
+  .qty-zero { color: var(--text-muted); }
+  .confirm-modal { width: 360px; }
+  .confirm-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--red-bg); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+  .confirm-icon i { color: var(--red-text); font-size: 20px; }
+  .confirm-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+  .confirm-msg { font-size: 13px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 1.25rem; }
+  .empty { text-align: center; padding: 3rem 1rem; color: var(--text-secondary); }
+  .empty i { font-size: 40px; opacity: 0.3; display: block; margin-bottom: 10px; }
+  .empty p { font-size: 14px; }
+  .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: #1a1a18; color: #f0efe8; padding: 10px 20px; border-radius: 999px; font-size: 13px; font-weight: 500; z-index: 999; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
+  .toast.show { opacity: 1; }
+  .notif-banner { position: fixed; top: 64px; right: 1rem; background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 10px 14px; font-size: 12px; color: var(--text-secondary); box-shadow: var(--shadow); z-index: 300; opacity: 0; transform: translateY(-6px); transition: opacity 0.25s, transform 0.25s; pointer-events: none; max-width: 280px; }
+  .notif-banner.show { opacity: 1; transform: translateY(0); }
+  .notif-banner strong { color: var(--text); }
+  .detail-emp-header { display: flex; align-items: center; gap: 12px; flex: 1; }
+  .detail-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--blue-bg); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px; color: var(--blue-text); flex-shrink: 0; }
+  .section-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 12px; }
+  .offline-bar { display: none; background: var(--red-bg); color: var(--red-text); font-size: 12px; font-weight: 500; text-align: center; padding: 7px; border-bottom: 0.5px solid var(--red); }
+  .offline-bar.show { display: block; }
+  @media (max-width: 640px) {
+    .topbar { padding: 0 1rem; flex-wrap: wrap; height: auto; padding-top: 8px; padding-bottom: 8px; gap: 8px; }
+    .main { padding: 1rem; }
+    .app-sub, .user-chip { display: none; }
+    .form-grid { grid-template-columns: 1fr; }
+    .col-full { grid-column: 1; }
+    .nav-btn span { display: none; }
+    .sync-badge span { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-logo"><i class="ti ti-shirt"></i></div>
+  <div class="spinner"></div>
+  <p>Verificando autenticação...</p>
+</div>
+
+<!-- LOGIN -->
+<div class="login-screen hidden" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><i class="ti ti-shirt"></i></div>
+    <div class="login-title">Viu internet</div>
+    <div class="login-sub">Controle de Vestuário — faça login para continuar</div>
+
+    <div class="login-field">
+      <label>E-mail</label>
+      <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email">
+    </div>
+    <div class="login-field">
+      <label>Senha</label>
+      <input type="password" id="login-senha" placeholder="••••••••" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter') fazerLogin()">
+    </div>
+
+    <div class="login-error" id="login-error"></div>
+
+    <button class="btn-login" id="btn-login" onclick="fazerLogin()">
+      <i class="ti ti-login"></i> Entrar
+    </button>
+
+    <div class="login-footer">Acesso restrito a usuários autorizados.<br>Contate o administrador para obter acesso.</div>
+  </div>
+</div>
+
+<!-- OFFLINE BAR -->
+<div class="offline-bar" id="offline-bar">
+  <i class="ti ti-wifi-off"></i> Sem conexão — as alterações serão sincronizadas quando a conexão for restabelecida
+</div>
+
+<!-- APP -->
+<div class="app-wrapper hidden" id="app">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo"><i class="ti ti-shirt"></i></div>
+      <div>
+        <div class="app-title">Viu internet — Vestuário</div>
+        <div class="app-sub">Controle de Vestuário · Provedor de Internet</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="sync-badge syncing" id="sync-badge">
+        <span class="sync-dot"></span>
+        <span id="sync-label">Conectando</span>
+      </div>
+      <div class="user-chip">
+        <i class="ti ti-user-circle"></i>
+        <span class="user-email" id="user-email-display"></span>
+      </div>
+      <button class="btn-logout" onclick="fazerLogout()">
+        <i class="ti ti-logout"></i> Sair
+      </button>
+      <nav class="nav">
+        <button class="nav-btn active" id="nav-dashboard" onclick="showSection('dashboard')">
+          <i class="ti ti-layout-dashboard"></i><span>Painel</span>
+        </button>
+        <button class="nav-btn" id="nav-funcionarios" onclick="showSection('funcionarios')">
+          <i class="ti ti-users"></i><span>Funcionários</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div id="sec-dashboard" class="section visible">
+      <div class="stats" id="stats-grid"></div>
+      <div class="section-title">Funcionários ativos</div>
+      <div id="dash-emp-grid" class="emp-grid"></div>
+    </div>
+    <div id="sec-funcionarios" class="section">
+      <div class="toolbar">
+        <input type="text" id="search-input" placeholder="Buscar por nome, matrícula ou cargo..." oninput="renderFuncionarios()">
+        <button class="btn btn-primary" onclick="openCadastro()">
+          <i class="ti ti-user-plus"></i> Cadastrar
+        </button>
+      </div>
+      <div id="emp-grid" class="emp-grid"></div>
+    </div>
+  </main>
+</div>
+
+<div id="modal-overlay" class="modal-overlay hidden" onclick="overlayClick(event)">
+  <div id="modal-content"></div>
+</div>
+<div id="toast" class="toast"></div>
+<div id="notif-banner" class="notif-banner"></div>
+
+<script type="module">
+import { initializeApp }                              from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getDatabase, ref, onValue, set, push,
+         remove, update }                             from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+import { getAuth, signInWithEmailAndPassword,
+         signOut, onAuthStateChanged }                from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey:            "AIzaSyBx0Yozdw0lpWBwUKTG6nDVQnh9iBMgZHU",
+  authDomain:        "vestuario-viu.firebaseapp.com",
+  databaseURL:       "https://vestuario-viu-default-rtdb.firebaseio.com",
+  projectId:         "vestuario-viu",
+  storageBucket:     "vestuario-viu.firebasestorage.app",
+  messagingSenderId: "314992937343",
+  appId:             "1:314992937343:web:dde451d2447fd4dcdc724a"
+};
+
+const app    = initializeApp(firebaseConfig);
+const db     = getDatabase(app);
+const auth   = getAuth(app);
+const empRef = ref(db, 'employees');
+
+// ── CONSTANTES ────────────────────────────────────────────────────────────────
+const ITEMS = [
+  { id:'camisa',  nome:'Camisa polo',          icon:'ti-shirt',        sizes:['P','M','G','GG','XGG'] },
+  { id:'calca',   nome:'Calça de trabalho',     icon:'ti-building',     sizes:['36','38','40','42','44','46','48','50'] },
+  { id:'bota',    nome:'Bota de segurança',     icon:'ti-shoe',         sizes:['37','38','39','40','41','42','43','44','45'] },
+  { id:'bone',    nome:'Boné / Chapéu',         icon:'ti-hat',          sizes:['Único'] },
+  { id:'jaqueta', nome:'Jaqueta',               icon:'ti-chevrons-up',  sizes:['P','M','G','GG','XGG'] },
+  { id:'cinto',   nome:'Cinto de segurança',    icon:'ti-badge',        sizes:['P','M','G'] },
+  { id:'luva',    nome:'Luvas de proteção',     icon:'ti-hand-stop',    sizes:['P','M','G'] },
+  { id:'oculos',  nome:'Óculos de proteção',    icon:'ti-eyeglass',     sizes:['Único'] },
+  { id:'colete',  nome:'Colete refletivo',      icon:'ti-vest',         sizes:['P','M','G','GG'] },
+  { id:'capa',    nome:'Capa de chuva',         icon:'ti-cloud-rain',   sizes:['P','M','G','GG'] },
+];
+const CARGOS = [
+  'Técnico de Campo','Técnico de NOC','Instalador',
+  'Supervisor Técnico','Atendimento','TI / Suporte',
+  'Administrativo','Gerência'
+];
+
+// ── ESTADO ────────────────────────────────────────────────────────────────────
+let employees  = {};
+let firstLoad  = true;
+let estoqueEdit = {};
+let dbListenerOff = null;
+
+// ── ERROS DE LOGIN TRADUZIDOS ─────────────────────────────────────────────────
+const AUTH_ERRORS = {
+  'auth/invalid-email':        'E-mail inválido.',
+  'auth/user-not-found':       'Usuário não encontrado.',
+  'auth/wrong-password':       'Senha incorreta.',
+  'auth/invalid-credential':   'E-mail ou senha incorretos.',
+  'auth/too-many-requests':    'Muitas tentativas. Aguarde alguns minutos.',
+  'auth/network-request-failed': 'Sem conexão. Verifique sua internet.',
+  'auth/user-disabled':        'Usuário desativado. Contate o administrador.',
+};
+
+// ── AUTH STATE ────────────────────────────────────────────────────────────────
+onAuthStateChanged(auth, user => {
+  hideSplash();
+  if (user) {
+    mostrarApp(user);
+  } else {
+    mostrarLogin();
+  }
+});
+
+function mostrarLogin() {
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+  if (dbListenerOff) { dbListenerOff(); dbListenerOff = null; }
+}
+
+function mostrarApp(user) {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('user-email-display').textContent = user.email;
+  iniciarDB();
+}
+
+// ── LOGIN / LOGOUT ────────────────────────────────────────────────────────────
+async function fazerLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const senha = document.getElementById('login-senha').value;
+  const errEl = document.getElementById('login-error');
+  const btn   = document.getElementById('btn-login');
+
+  errEl.classList.remove('show');
+  if (!email || !senha) {
+    errEl.textContent = 'Preencha e-mail e senha.';
+    errEl.classList.add('show');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="width:18px;height:18px;border-width:2px"></div> Entrando...';
+
+  try {
+    await signInWithEmailAndPassword(auth, email, senha);
+    // onAuthStateChanged cuida do restante
+  } catch(err) {
+    const msg = AUTH_ERRORS[err.code] || 'Erro ao entrar. Tente novamente.';
+    errEl.textContent = msg;
+    errEl.classList.add('show');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-login"></i> Entrar';
+  }
+}
+
+async function fazerLogout() {
+  await signOut(auth);
+  employees = {};
+  firstLoad = true;
+  toast('Sessão encerrada');
+}
+
+window.fazerLogin  = fazerLogin;
+window.fazerLogout = fazerLogout;
+
+// ── BANCO DE DADOS ────────────────────────────────────────────────────────────
+function iniciarDB() {
+  // Conexão / offline
+  const connRef = ref(db, '.info/connected');
+  onValue(connRef, snap => {
+    const online = snap.val() === true;
+    document.getElementById('offline-bar').classList.toggle('show', !online);
+    setSyncState(online ? 'ok' : 'error', online ? 'Conectado' : 'Offline');
+  });
+
+  // Listener realtime de funcionários
+  dbListenerOff = onValue(empRef, snap => {
+    const prev = Object.keys(employees).length;
+    employees  = snap.val() || {};
+    const curr = Object.keys(employees).length;
+
+    if (firstLoad) {
+      firstLoad = false;
+      if (curr === 0) seedData();
+    } else {
+      const diff = curr - prev;
+      if      (diff > 0)  showNotif(`Outro usuário adicionou ${diff} funcionário(s)`);
+      else if (diff < 0)  showNotif(`Outro usuário removeu ${Math.abs(diff)} funcionário(s)`);
+      else                showNotif('Estoque atualizado por outro usuário');
+    }
+
+    setSyncState('ok', 'Conectado');
+    renderAll();
+  });
+}
+
+async function seedData() {
+  const seeds = [
+    { nome:'Carlos Mendes',   cargo:'Técnico de Campo', matricula:'001', telefone:'(51) 9 9999-1234',
+      vestuario:{ camisa:{qtd:2,tam:'M'}, calca:{qtd:2,tam:'40'}, bota:{qtd:1,tam:'41'}, bone:{qtd:1,tam:'Único'}, colete:{qtd:2,tam:'M'} } },
+    { nome:'Ana Paula Rocha', cargo:'Técnico de NOC',   matricula:'002', telefone:'(51) 9 9888-5678',
+      vestuario:{ camisa:{qtd:2,tam:'P'}, calca:{qtd:1,tam:'38'}, bota:{qtd:1,tam:'37'} } },
+    { nome:'Rodrigo Lima',    cargo:'Instalador',       matricula:'003', telefone:'(51) 9 9777-9012',
+      vestuario:{ camisa:{qtd:3,tam:'G'}, calca:{qtd:2,tam:'42'}, bota:{qtd:1,tam:'42'}, jaqueta:{qtd:1,tam:'G'}, colete:{qtd:2,tam:'G'}, cinto:{qtd:1,tam:'G'} } },
+  ];
+  for (const s of seeds) await push(empRef, s);
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function initials(nome) { return nome.split(' ').slice(0,2).map(n=>n[0]).join('').toUpperCase(); }
+function totalPecas(emp) { return Object.values(emp.vestuario||{}).reduce((s,v)=>s+(v.qtd||0),0); }
+function empList() { return Object.entries(employees).map(([key,val])=>({...val,_key:key})); }
+
+function hideSplash() {
+  const s = document.getElementById('splash');
+  s.classList.add('hidden');
+  setTimeout(()=>s.remove(), 400);
+}
+function setSyncState(state, label) {
+  const badge = document.getElementById('sync-badge');
+  const lbl   = document.getElementById('sync-label');
+  badge.className = `sync-badge${state !== 'ok' ? ' '+state : ''}`;
+  lbl.textContent = label;
+}
+function showNotif(msg) {
+  const el = document.getElementById('notif-banner');
+  el.innerHTML = `<i class="ti ti-refresh" style="margin-right:6px;font-size:13px"></i><strong>Atualização:</strong> ${msg}`;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>el.classList.remove('show'), 3500);
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('visible'));
+  document.getElementById('sec-'+name).classList.add('visible');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-'+name).classList.add('active');
+}
+window.showSection = showSection;
+
+function renderAll() { renderDashboard(); renderFuncionarios(); }
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function renderDashboard() {
+  const list    = empList();
+  const total   = list.length;
+  const pecas   = list.reduce((s,e)=>s+totalPecas(e),0);
+  const semVest = list.filter(e=>totalPecas(e)===0).length;
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat"><div class="stat-label">Funcionários</div><div class="stat-val">${total}</div></div>
+    <div class="stat"><div class="stat-label">Peças distribuídas</div><div class="stat-val">${pecas}</div></div>
+    <div class="stat"><div class="stat-label">Sem vestuário</div><div class="stat-val">${semVest}</div></div>
+    <div class="stat"><div class="stat-label">Tipos de item</div><div class="stat-val">${ITEMS.length}</div></div>
+  `;
+  const grid = document.getElementById('dash-emp-grid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><i class="ti ti-users"></i><p>Nenhum funcionário cadastrado ainda</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(e=>empCardHTML(e)).join('');
+}
+
+// ── FUNCIONÁRIOS ──────────────────────────────────────────────────────────────
+function renderFuncionarios() {
+  const q  = (document.getElementById('search-input')||{}).value||'';
+  const ql = q.toLowerCase();
+  const list = empList().filter(e=>
+    e.nome.toLowerCase().includes(ql) ||
+    (e.matricula||'').includes(q) ||
+    (e.cargo||'').toLowerCase().includes(ql)
+  );
+  const grid = document.getElementById('emp-grid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><i class="ti ti-search"></i><p>Nenhum funcionário encontrado</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(e=>empCardHTML(e)).join('');
+}
+
+function empCardHTML(e) {
+  const tv = totalPecas(e);
+  const badge = tv > 0
+    ? `<span class="badge badge-ok"><i class="ti ti-check" style="font-size:11px"></i> ${tv} peças</span>`
+    : `<span class="badge badge-warn"><i class="ti ti-alert-triangle" style="font-size:11px"></i> Sem itens</span>`;
+  return `
+    <div class="emp-card" onclick="openEstoque('${e._key}')">
+      <div class="emp-avatar">${initials(e.nome)}</div>
+      <div class="emp-name">${e.nome}</div>
+      <div class="emp-role">${e.cargo} · Matríc. ${e.matricula}</div>
+      ${badge}
+      <div class="emp-actions" onclick="event.stopPropagation()">
+        <button class="btn btn-sm" onclick="openEstoque('${e._key}')"><i class="ti ti-shirt"></i> Estoque</button>
+        <button class="btn btn-sm btn-danger" onclick="confirmDesligar('${e._key}')"><i class="ti ti-user-minus"></i> Desligar</button>
+      </div>
+    </div>`;
+}
+
+// ── CADASTRO ──────────────────────────────────────────────────────────────────
+function openCadastro() {
+  openModal(`
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Cadastrar funcionário</span>
+        <button class="btn-icon" onclick="closeModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="form-grid">
+        <div class="form-row col-full">
+          <label>Nome completo *</label>
+          <input type="text" id="f-nome" placeholder="Ex: João da Silva">
+        </div>
+        <div class="form-row">
+          <label>Matrícula *</label>
+          <input type="text" id="f-mat" placeholder="Ex: 004">
+        </div>
+        <div class="form-row">
+          <label>Telefone</label>
+          <input type="tel" id="f-tel" placeholder="(51) 9 0000-0000">
+        </div>
+        <div class="form-row col-full">
+          <label>Cargo</label>
+          <select id="f-cargo">${CARGOS.map(c=>`<option>${c}</option>`).join('')}</select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-primary" id="btn-salvar" onclick="salvarFuncionario()">
+          <i class="ti ti-check"></i> Salvar
+        </button>
+      </div>
+    </div>`);
+}
+window.openCadastro = openCadastro;
+
+async function salvarFuncionario() {
+  const nome  = document.getElementById('f-nome').value.trim();
+  const mat   = document.getElementById('f-mat').value.trim();
+  const tel   = document.getElementById('f-tel').value.trim();
+  const cargo = document.getElementById('f-cargo').value;
+  if (!nome||!mat) { toast('Preencha nome e matrícula'); return; }
+  if (empList().find(e=>e.matricula===mat)) { toast('Matrícula já cadastrada'); return; }
+  const btn = document.getElementById('btn-salvar');
+  if (btn) { btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> Salvando...'; }
+  setSyncState('syncing','Salvando...');
+  try {
+    await push(empRef, { nome, cargo, matricula:mat, telefone:tel, vestuario:{} });
+    closeModal();
+    toast('Funcionário cadastrado com sucesso!');
+  } catch(err) {
+    toast('Erro ao salvar. Verifique a conexão.');
+    if (btn) { btn.disabled=false; btn.innerHTML='<i class="ti ti-check"></i> Salvar'; }
+    setSyncState('error','Erro');
+  }
+}
+window.salvarFuncionario = salvarFuncionario;
+
+// ── ESTOQUE ───────────────────────────────────────────────────────────────────
+function openEstoque(key) {
+  const e = employees[key];
+  if (!e) return;
+  estoqueEdit = JSON.parse(JSON.stringify(e.vestuario||{}));
+  const rows = ITEMS.map(item => {
+    const v    = estoqueEdit[item.id]||{qtd:0,tam:item.sizes[0]};
+    const opts = item.sizes.map(s=>`<option ${v.tam===s?'selected':''}>${s}</option>`).join('');
+    return `
+      <div class="vest-item">
+        <div class="vest-icon"><i class="ti ${item.icon}"></i></div>
+        <div class="vest-info">
+          <div class="vest-name">${item.nome}</div>
+          <div class="vest-size">Tamanho:
+            <select id="tam-${item.id}" onchange="editTam('${item.id}',this.value)">${opts}</select>
+          </div>
+        </div>
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="editQty('${item.id}',-1)">−</button>
+          <span class="qty-val ${v.qtd===0?'qty-zero':''}" id="qty-${item.id}">${v.qtd}</span>
+          <button class="qty-btn" onclick="editQty('${item.id}',1)">+</button>
+        </div>
+      </div>`;
+  }).join('');
+  openModal(`
+    <div class="modal">
+      <div class="modal-header">
+        <div class="detail-emp-header">
+          <div class="detail-avatar">${initials(e.nome)}</div>
+          <div>
+            <div class="modal-title">${e.nome}</div>
+            <div style="font-size:12px;color:var(--text-secondary)">${e.cargo} · Matríc. ${e.matricula}${e.telefone?' · '+e.telefone:''}</div>
+          </div>
+        </div>
+        <button class="btn-icon" onclick="closeModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="section-label">Vestuário e EPIs — use + / − para ajustar quantidade</div>
+      ${rows}
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button class="btn btn-danger" onclick="confirmLimpar('${key}')"><i class="ti ti-trash"></i> Limpar tudo</button>
+        <button class="btn btn-primary" id="btn-salvar-est" onclick="salvarEstoque('${key}')">
+          <i class="ti ti-device-floppy"></i> Salvar e Fechar
+        </button>
+      </div>
+    </div>`);
+}
+window.openEstoque = openEstoque;
+
+function editQty(itemId, delta) {
+  if (!estoqueEdit[itemId]) estoqueEdit[itemId] = {qtd:0, tam:ITEMS.find(i=>i.id===itemId).sizes[0]};
+  estoqueEdit[itemId].qtd = Math.max(0,(estoqueEdit[itemId].qtd||0)+delta);
+  const span = document.getElementById(`qty-${itemId}`);
+  if (span) { span.textContent=estoqueEdit[itemId].qtd; span.className='qty-val'+(estoqueEdit[itemId].qtd===0?' qty-zero':''); }
+}
+window.editQty = editQty;
+
+function editTam(itemId, val) {
+  if (!estoqueEdit[itemId]) estoqueEdit[itemId]={qtd:0,tam:val};
+  else estoqueEdit[itemId].tam=val;
+}
+window.editTam = editTam;
+
+async function salvarEstoque(key) {
+  const btn = document.getElementById('btn-salvar-est');
+  if (btn) { btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> Salvando...'; }
+  setSyncState('syncing','Salvando...');
+  try {
+    await update(ref(db,`employees/${key}`),{vestuario:estoqueEdit});
+    closeModal();
+    toast('Estoque salvo com sucesso!');
+  } catch(err) {
+    toast('Erro ao salvar. Verifique a conexão.');
+    if (btn) { btn.disabled=false; btn.innerHTML='<i class="ti ti-device-floppy"></i> Salvar e Fechar'; }
+    setSyncState('error','Erro');
+  }
+}
+window.salvarEstoque = salvarEstoque;
+
+function confirmLimpar(key) {
+  const e = employees[key];
+  openModal(`
+    <div class="modal confirm-modal">
+      <div class="confirm-icon"><i class="ti ti-alert-triangle"></i></div>
+      <div class="confirm-title">Limpar estoque de ${e.nome}?</div>
+      <div class="confirm-msg">Todos os itens serão zerados. Esta ação não pode ser desfeita.</div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn" onclick="openEstoque('${key}')">Cancelar</button>
+        <button class="btn btn-danger" onclick="limparEstoque('${key}')"><i class="ti ti-trash"></i> Limpar</button>
+      </div>
+    </div>`);
+}
+window.confirmLimpar = confirmLimpar;
+
+async function limparEstoque(key) {
+  setSyncState('syncing','Salvando...');
+  try {
+    await update(ref(db,`employees/${key}`),{vestuario:{}});
+    closeModal(); toast('Estoque limpo com sucesso');
+  } catch(err) { toast('Erro ao limpar.'); setSyncState('error','Erro'); }
+}
+window.limparEstoque = limparEstoque;
+
+function confirmDesligar(key) {
+  const e = employees[key];
+  if (!e) return;
+  openModal(`
+    <div class="modal confirm-modal">
+      <div class="confirm-icon"><i class="ti ti-user-minus"></i></div>
+      <div class="confirm-title">Desligar ${e.nome}?</div>
+      <div class="confirm-msg">O funcionário e todo o seu estoque serão removidos permanentemente.</div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-danger" id="btn-desligar" onclick="desligar('${key}')"><i class="ti ti-trash"></i> Desligar</button>
+      </div>
+    </div>`);
+}
+window.confirmDesligar = confirmDesligar;
+
+async function desligar(key) {
+  const btn = document.getElementById('btn-desligar');
+  if (btn) btn.disabled=true;
+  setSyncState('syncing','Removendo...');
+  try {
+    await remove(ref(db,`employees/${key}`));
+    closeModal(); toast('Funcionário desligado e estoque removido');
+  } catch(err) {
+    toast('Erro ao remover.'); if (btn) btn.disabled=false; setSyncState('error','Erro');
+  }
+}
+window.desligar = desligar;
+
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+function openModal(html) {
+  document.getElementById('modal-content').innerHTML=html;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+function closeModal() {
+  estoqueEdit={};
+  document.getElementById('modal-overlay').classList.add('hidden');
+}
+function overlayClick(e) {
+  if (e.target===document.getElementById('modal-overlay')) closeModal();
+}
+window.openModal=openModal; window.closeModal=closeModal; window.overlayClick=overlayClick;
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.classList.remove('show'),2600);
+}
+window.toast=toast;
+</script>
+</body>
+</html>
