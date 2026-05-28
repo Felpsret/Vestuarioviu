@@ -31,37 +31,17 @@
   }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg-tertiary); color: var(--text); font-size: 15px; line-height: 1.5; min-height: 100vh; }
 
-  /* ── SPLASH ── */
-  .splash { position: fixed; inset: 0; background: var(--bg-tertiary); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 16px; transition: opacity 0.3s; }
+  /* SPLASH */
+  .splash { position: fixed; inset: 0; background: var(--bg-tertiary); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 16px; transition: opacity 0.35s; }
   .splash.hidden { opacity: 0; pointer-events: none; }
-  .splash-logo { width: 56px; height: 56px; border-radius: 14px; background: var(--blue); display: flex; align-items: center; justify-content: center; }
-  .splash-logo i { color: #E6F1FB; font-size: 28px; }
+  .splash-logo { width: 60px; height: 60px; border-radius: 16px; background: var(--blue); display: flex; align-items: center; justify-content: center; }
+  .splash-logo i { color: #E6F1FB; font-size: 30px; }
   .splash p { font-size: 13px; color: var(--text-secondary); }
-  .spinner { width: 24px; height: 24px; border: 2.5px solid var(--border-md); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  .spinner { width: 22px; height: 22px; border: 2.5px solid var(--border-md); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── LOGIN ── */
-  .login-screen { position: fixed; inset: 0; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 1rem; }
-  .login-screen.hidden { display: none; }
-  .login-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; width: 380px; max-width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.10); }
-  .login-logo { width: 48px; height: 48px; border-radius: 12px; background: var(--blue); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; }
-  .login-logo i { color: #E6F1FB; font-size: 24px; }
-  .login-title { font-size: 20px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-  .login-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.5rem; }
-  .login-field { margin-bottom: 14px; }
-  .login-field label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 5px; }
-  .login-field input { width: 100%; padding: 9px 12px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: var(--bg); color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.15s; }
-  .login-field input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
-  .login-error { font-size: 12px; color: var(--red-text); background: var(--red-bg); border-radius: var(--radius); padding: 8px 12px; margin-bottom: 14px; display: none; }
-  .login-error.show { display: block; }
-  .btn-login { width: 100%; padding: 10px; border-radius: var(--radius); border: none; background: var(--blue); color: #E6F1FB; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 4px; }
-  .btn-login:hover { opacity: 0.88; }
-  .btn-login:disabled { opacity: 0.5; pointer-events: none; }
-  .login-footer { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 1.25rem; }
-
-  /* ── APP ── */
+  /* LAYOUT */
   .app-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
-  .app-wrapper.hidden { display: none; }
   .topbar { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 50; gap: 12px; }
   .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
   .logo { width: 34px; height: 34px; border-radius: var(--radius); background: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -69,11 +49,6 @@
   .app-title { font-size: 16px; font-weight: 600; color: var(--text); white-space: nowrap; }
   .app-sub { font-size: 11px; color: var(--text-secondary); }
   .topbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  .user-chip { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); padding: 4px 10px; border-radius: 999px; background: var(--bg-secondary); border: 0.5px solid var(--border); max-width: 180px; overflow: hidden; }
-  .user-chip i { flex-shrink: 0; font-size: 14px; }
-  .user-email { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .btn-logout { padding: 5px 10px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: transparent; font-size: 12px; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.15s; white-space: nowrap; }
-  .btn-logout:hover { background: var(--red-bg); color: var(--red-text); border-color: var(--red); }
   .sync-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 3px 9px; border-radius: 999px; background: var(--green-bg); color: var(--green-text); font-weight: 500; transition: background 0.3s, color 0.3s; white-space: nowrap; }
   .sync-badge.syncing { background: var(--amber-bg); color: var(--amber-text); }
   .sync-badge.error { background: var(--red-bg); color: var(--red-text); }
@@ -81,16 +56,20 @@
   .sync-badge.syncing .sync-dot { animation: pulse 0.8s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
   .nav { display: flex; gap: 4px; }
-  .nav-btn { padding: 6px 14px; border-radius: var(--radius); border: 0.5px solid transparent; background: transparent; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
+  .nav-btn { padding: 6px 14px; border-radius: var(--radius); border: 0.5px solid transparent; background: transparent; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
   .nav-btn:hover:not(.active) { background: var(--bg-secondary); color: var(--text); }
   .nav-btn.active { background: var(--blue-bg); color: var(--blue-text); border-color: rgba(24,95,165,0.2); font-weight: 500; }
   .main { flex: 1; padding: 1.5rem; max-width: 960px; margin: 0 auto; width: 100%; }
   .section { display: none; }
   .section.visible { display: block; }
+
+  /* STATS */
   .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
   .stat { background: var(--bg); border-radius: var(--radius); padding: 14px 16px; border: 0.5px solid var(--border); }
   .stat-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
   .stat-val { font-size: 26px; font-weight: 600; color: var(--text); }
+
+  /* EMPLOYEE GRID */
   .emp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
   .emp-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
   .emp-card:hover { border-color: var(--border-md); box-shadow: var(--shadow); }
@@ -101,6 +80,45 @@
   .badge-ok { background: var(--green-bg); color: var(--green-text); }
   .badge-warn { background: var(--amber-bg); color: var(--amber-text); }
   .emp-actions { display: flex; gap: 6px; margin-top: 10px; }
+
+  /* UNIFORMES LIST */
+  .uniforms-list { display: flex; flex-direction: column; gap: 10px; }
+  .uniform-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .uniform-icon { width: 38px; height: 38px; border-radius: var(--radius); background: var(--blue-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .uniform-icon i { font-size: 18px; color: var(--blue-text); }
+  .uniform-info { flex: 1; min-width: 0; }
+  .uniform-name { font-size: 14px; font-weight: 500; color: var(--text); }
+  .uniform-sizes { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .uniform-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+  /* VEST ITEMS NO FUNCIONÁRIO */
+  .vest-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .vest-row {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--bg-secondary); border-radius: var(--radius);
+    padding: 10px 12px; border: 0.5px solid var(--border);
+  }
+  .vest-row-icon { width: 32px; height: 32px; border-radius: var(--radius); background: var(--blue-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .vest-row-icon i { font-size: 15px; color: var(--blue-text); }
+  .vest-row-info { flex: 1; min-width: 0; }
+  .vest-row-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .vest-row-detail { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
+  .vest-row-del { padding: 5px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); border-radius: var(--radius); transition: all 0.15s; flex-shrink: 0; }
+  .vest-row-del:hover { background: var(--red-bg); color: var(--red-text); }
+
+  .add-vest-form { background: var(--bg-secondary); border: 0.5px dashed var(--border-md); border-radius: var(--radius); padding: 12px; display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; }
+  .add-vest-form .field { display: flex; flex-direction: column; gap: 4px; min-width: 120px; flex: 1; }
+  .add-vest-form label { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+  .add-vest-form select, .add-vest-form input { font-size: 13px; padding: 7px 10px; }
+
+  /* SIZES TAG INPUT */
+  .sizes-input-wrap { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 6px 8px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: var(--bg); min-height: 38px; cursor: text; }
+  .size-tag { display: inline-flex; align-items: center; gap: 4px; background: var(--blue-bg); color: var(--blue-text); font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 999px; }
+  .size-tag button { background: none; border: none; cursor: pointer; color: inherit; opacity: 0.6; padding: 0; font-size: 13px; line-height: 1; display: flex; align-items: center; }
+  .size-tag button:hover { opacity: 1; }
+  .sizes-input-wrap input { border: none; outline: none; background: transparent; font-size: 13px; color: var(--text); min-width: 60px; flex: 1; padding: 0; font-family: inherit; }
+
+  /* BUTTONS */
   .btn { padding: 7px 14px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: transparent; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
   .btn:hover { background: var(--bg-secondary); color: var(--text); }
   .btn:disabled { opacity: 0.45; pointer-events: none; }
@@ -111,107 +129,89 @@
   .btn-sm { padding: 5px 10px; font-size: 12px; }
   .btn-icon { padding: 6px; border: none; background: transparent; cursor: pointer; color: var(--text-secondary); border-radius: var(--radius); }
   .btn-icon:hover { background: var(--bg-secondary); }
+
+  /* TOOLBAR */
   .toolbar { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; }
   .toolbar input { flex: 1; }
-  input[type=text], input[type=tel], input[type=email], input[type=password], select { width: 100%; padding: 7px 10px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: var(--bg); color: var(--text); font-size: 13px; font-family: inherit; transition: border-color 0.15s; outline: none; }
+
+  /* FORM */
+  input[type=text], input[type=tel], input[type=number], select {
+    width: 100%; padding: 7px 10px; border-radius: var(--radius);
+    border: 0.5px solid var(--border-md); background: var(--bg); color: var(--text);
+    font-size: 13px; font-family: inherit; transition: border-color 0.15s; outline: none;
+  }
   input:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
   select { cursor: pointer; }
   label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 5px; }
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .form-row { margin-bottom: 0; }
   .col-full { grid-column: 1 / -1; }
+
+  /* MODAL */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 1rem; }
   .modal-overlay.hidden { display: none; }
-  .modal { background: var(--bg); border-radius: var(--radius-lg); border: 0.5px solid var(--border); padding: 1.25rem; width: 500px; max-width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.18); }
+  .modal { background: var(--bg); border-radius: var(--radius-lg); border: 0.5px solid var(--border); padding: 1.25rem; width: 520px; max-width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.18); }
   .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 12px; }
   .modal-title { font-size: 16px; font-weight: 500; color: var(--text); }
   .modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; padding-top: 1rem; border-top: 0.5px solid var(--border); }
   .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
-  .vest-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
-  .vest-item:last-child { border-bottom: none; }
-  .vest-icon { width: 34px; height: 34px; border-radius: var(--radius); background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .vest-icon i { font-size: 16px; color: var(--text-secondary); }
-  .vest-info { flex: 1; min-width: 0; }
-  .vest-name { font-size: 13px; font-weight: 500; color: var(--text); }
-  .vest-size { font-size: 11px; color: var(--text-secondary); margin-top: 2px; display: flex; align-items: center; gap: 4px; }
-  .vest-size select { font-size: 11px; padding: 2px 6px; width: auto; }
-  .qty-ctrl { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-  .qty-btn { width: 26px; height: 26px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: transparent; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: background 0.1s; }
-  .qty-btn:hover { background: var(--bg-secondary); color: var(--text); }
-  .qty-val { min-width: 24px; text-align: center; font-size: 14px; font-weight: 500; color: var(--text); }
-  .qty-zero { color: var(--text-muted); }
+
+  /* CONFIRM */
   .confirm-modal { width: 360px; }
   .confirm-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--red-bg); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
   .confirm-icon i { color: var(--red-text); font-size: 20px; }
   .confirm-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
   .confirm-msg { font-size: 13px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 1.25rem; }
+
+  /* EMPTY */
   .empty { text-align: center; padding: 3rem 1rem; color: var(--text-secondary); }
   .empty i { font-size: 40px; opacity: 0.3; display: block; margin-bottom: 10px; }
   .empty p { font-size: 14px; }
+
+  /* TOAST */
   .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: #1a1a18; color: #f0efe8; padding: 10px 20px; border-radius: 999px; font-size: 13px; font-weight: 500; z-index: 999; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
   .toast.show { opacity: 1; }
+
+  /* NOTIF */
   .notif-banner { position: fixed; top: 64px; right: 1rem; background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 10px 14px; font-size: 12px; color: var(--text-secondary); box-shadow: var(--shadow); z-index: 300; opacity: 0; transform: translateY(-6px); transition: opacity 0.25s, transform 0.25s; pointer-events: none; max-width: 280px; }
   .notif-banner.show { opacity: 1; transform: translateY(0); }
   .notif-banner strong { color: var(--text); }
+
+  /* DETAIL */
   .detail-emp-header { display: flex; align-items: center; gap: 12px; flex: 1; }
   .detail-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--blue-bg); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px; color: var(--blue-text); flex-shrink: 0; }
   .section-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 12px; }
+
   .offline-bar { display: none; background: var(--red-bg); color: var(--red-text); font-size: 12px; font-weight: 500; text-align: center; padding: 7px; border-bottom: 0.5px solid var(--red); }
   .offline-bar.show { display: block; }
+
+  .hint { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+
   @media (max-width: 640px) {
     .topbar { padding: 0 1rem; flex-wrap: wrap; height: auto; padding-top: 8px; padding-bottom: 8px; gap: 8px; }
     .main { padding: 1rem; }
-    .app-sub, .user-chip { display: none; }
+    .app-sub { display: none; }
     .form-grid { grid-template-columns: 1fr; }
     .col-full { grid-column: 1; }
     .nav-btn span { display: none; }
     .sync-badge span { display: none; }
+    .add-vest-form { flex-direction: column; }
   }
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
 <div class="splash" id="splash">
   <div class="splash-logo"><i class="ti ti-shirt"></i></div>
   <div class="spinner"></div>
-  <p>Verificando autenticação...</p>
+  <p>Conectando ao banco de dados...</p>
 </div>
 
-<!-- LOGIN -->
-<div class="login-screen hidden" id="login-screen">
-  <div class="login-card">
-    <div class="login-logo"><i class="ti ti-shirt"></i></div>
-    <div class="login-title">Viu internet</div>
-    <div class="login-sub">Controle de Vestuário — faça login para continuar</div>
-
-    <div class="login-field">
-      <label>E-mail</label>
-      <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email">
-    </div>
-    <div class="login-field">
-      <label>Senha</label>
-      <input type="password" id="login-senha" placeholder="••••••••" autocomplete="current-password"
-             onkeydown="if(event.key==='Enter') fazerLogin()">
-    </div>
-
-    <div class="login-error" id="login-error"></div>
-
-    <button class="btn-login" id="btn-login" onclick="fazerLogin()">
-      <i class="ti ti-login"></i> Entrar
-    </button>
-
-    <div class="login-footer">Acesso restrito a usuários autorizados.<br>Contate o administrador para obter acesso.</div>
-  </div>
-</div>
-
-<!-- OFFLINE BAR -->
 <div class="offline-bar" id="offline-bar">
   <i class="ti ti-wifi-off"></i> Sem conexão — as alterações serão sincronizadas quando a conexão for restabelecida
 </div>
 
-<!-- APP -->
-<div class="app-wrapper hidden" id="app">
+<div class="app-wrapper">
   <header class="topbar">
     <div class="topbar-left">
       <div class="logo"><i class="ti ti-shirt"></i></div>
@@ -225,13 +225,6 @@
         <span class="sync-dot"></span>
         <span id="sync-label">Conectando</span>
       </div>
-      <div class="user-chip">
-        <i class="ti ti-user-circle"></i>
-        <span class="user-email" id="user-email-display"></span>
-      </div>
-      <button class="btn-logout" onclick="fazerLogout()">
-        <i class="ti ti-logout"></i> Sair
-      </button>
       <nav class="nav">
         <button class="nav-btn active" id="nav-dashboard" onclick="showSection('dashboard')">
           <i class="ti ti-layout-dashboard"></i><span>Painel</span>
@@ -239,16 +232,22 @@
         <button class="nav-btn" id="nav-funcionarios" onclick="showSection('funcionarios')">
           <i class="ti ti-users"></i><span>Funcionários</span>
         </button>
+        <button class="nav-btn" id="nav-uniformes" onclick="showSection('uniformes')">
+          <i class="ti ti-shirt"></i><span>Uniformes</span>
+        </button>
       </nav>
     </div>
   </header>
 
   <main class="main">
+    <!-- DASHBOARD -->
     <div id="sec-dashboard" class="section visible">
       <div class="stats" id="stats-grid"></div>
       <div class="section-title">Funcionários ativos</div>
       <div id="dash-emp-grid" class="emp-grid"></div>
     </div>
+
+    <!-- FUNCIONÁRIOS -->
     <div id="sec-funcionarios" class="section">
       <div class="toolbar">
         <input type="text" id="search-input" placeholder="Buscar por nome, matrícula ou cargo..." oninput="renderFuncionarios()">
@@ -257,6 +256,19 @@
         </button>
       </div>
       <div id="emp-grid" class="emp-grid"></div>
+    </div>
+
+    <!-- UNIFORMES -->
+    <div id="sec-uniformes" class="section">
+      <div class="toolbar">
+        <div style="font-size:13px;color:var(--text-secondary);flex:1">
+          Gerencie os tipos de uniforme disponíveis no sistema
+        </div>
+        <button class="btn btn-primary" onclick="openCadastroUniforme()">
+          <i class="ti ti-plus"></i> Novo uniforme
+        </button>
+      </div>
+      <div id="uniformes-list" class="uniforms-list"></div>
     </div>
   </main>
 </div>
@@ -268,13 +280,10 @@
 <div id="notif-banner" class="notif-banner"></div>
 
 <script type="module">
-import { initializeApp }                              from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getDatabase, ref, onValue, set, push,
-         remove, update }                             from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
-import { getAuth, signInWithEmailAndPassword,
-         signOut, onAuthStateChanged }                from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { initializeApp }           from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getDatabase, ref, onValue,
+         push, remove, update, set } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
 
-// ── CONFIG ────────────────────────────────────────────────────────────────────
 const firebaseConfig = {
   apiKey:            "AIzaSyBx0Yozdw0lpWBwUKTG6nDVQnh9iBMgZHU",
   authDomain:        "vestuario-viu.firebaseapp.com",
@@ -285,155 +294,75 @@ const firebaseConfig = {
   appId:             "1:314992937343:web:dde451d2447fd4dcdc724a"
 };
 
-const app    = initializeApp(firebaseConfig);
-const db     = getDatabase(app);
-const auth   = getAuth(app);
-const empRef = ref(db, 'employees');
-
-// ── CONSTANTES ────────────────────────────────────────────────────────────────
-const ITEMS = [
-  { id:'camisa',  nome:'Camisa polo',          icon:'ti-shirt',        sizes:['P','M','G','GG','XGG'] },
-  { id:'calca',   nome:'Calça de trabalho',     icon:'ti-building',     sizes:['36','38','40','42','44','46','48','50'] },
-  { id:'bota',    nome:'Bota de segurança',     icon:'ti-shoe',         sizes:['37','38','39','40','41','42','43','44','45'] },
-  { id:'bone',    nome:'Boné / Chapéu',         icon:'ti-hat',          sizes:['Único'] },
-  { id:'jaqueta', nome:'Jaqueta Externa',               icon:'ti-chevrons-up',  sizes:['P','M','G','GG','XGG'] },
-  { id:'cinto',   nome:'Cinto de segurança',    icon:'ti-badge',        sizes:['P','M','G'] },
-  { id:'luva',    nome:'Luvas de proteção',     icon:'ti-hand-stop',    sizes:['P','M','G'] },
-  { id:'oculos',  nome:'Óculos de proteção',    icon:'ti-eyeglass',     sizes:['Único'] },
-  { id:'capa',    nome:'Capa de chuva',         icon:'ti-cloud-rain',   sizes:['P','M','G','GG'] },
-];
-const CARGOS = [
-  'Técnico de Campo','Técnico de NOC','Instalador',
-  'Supervisor Técnico','Atendimento','TI / Suporte',
-  'Administrativo','Gerência'
-];
+const app     = initializeApp(firebaseConfig);
+const db      = getDatabase(app);
+const empRef  = ref(db, 'employees');
+const unifRef = ref(db, 'uniformes');
 
 // ── ESTADO ────────────────────────────────────────────────────────────────────
 let employees  = {};
-let firstLoad  = true;
-let estoqueEdit = {};
-let dbListenerOff = null;
+let uniformes  = {};  // { key: { nome, tamanhos: ['P','M','G'] } }
+let firstLoadEmp  = true;
+let firstLoadUnif = true;
 
-// ── ERROS DE LOGIN TRADUZIDOS ─────────────────────────────────────────────────
-const AUTH_ERRORS = {
-  'auth/invalid-email':        'E-mail inválido.',
-  'auth/user-not-found':       'Usuário não encontrado.',
-  'auth/wrong-password':       'Senha incorreta.',
-  'auth/invalid-credential':   'E-mail ou senha incorretos.',
-  'auth/too-many-requests':    'Muitas tentativas. Aguarde alguns minutos.',
-  'auth/network-request-failed': 'Sem conexão. Verifique sua internet.',
-  'auth/user-disabled':        'Usuário desativado. Contate o administrador.',
-};
-
-// ── AUTH STATE ────────────────────────────────────────────────────────────────
-onAuthStateChanged(auth, user => {
-  hideSplash();
-  if (user) {
-    mostrarApp(user);
-  } else {
-    mostrarLogin();
-  }
+// ── CONEXÃO ───────────────────────────────────────────────────────────────────
+onValue(ref(db, '.info/connected'), snap => {
+  const online = snap.val() === true;
+  document.getElementById('offline-bar').classList.toggle('show', !online);
+  setSyncState(online ? 'ok' : 'error', online ? 'Conectado' : 'Offline');
 });
 
-function mostrarLogin() {
-  document.getElementById('app').classList.add('hidden');
-  document.getElementById('login-screen').classList.remove('hidden');
-  if (dbListenerOff) { dbListenerOff(); dbListenerOff = null; }
-}
-
-function mostrarApp(user) {
-  document.getElementById('login-screen').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-  document.getElementById('user-email-display').textContent = user.email;
-  iniciarDB();
-}
-
-// ── LOGIN / LOGOUT ────────────────────────────────────────────────────────────
-async function fazerLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const senha = document.getElementById('login-senha').value;
-  const errEl = document.getElementById('login-error');
-  const btn   = document.getElementById('btn-login');
-
-  errEl.classList.remove('show');
-  if (!email || !senha) {
-    errEl.textContent = 'Preencha e-mail e senha.';
-    errEl.classList.add('show');
-    return;
+// ── LISTENERS ─────────────────────────────────────────────────────────────────
+onValue(unifRef, snap => {
+  uniformes = snap.val() || {};
+  if (firstLoadUnif) {
+    firstLoadUnif = false;
+    if (Object.keys(uniformes).length === 0) seedUniformes();
   }
+  renderUniformes();
+  // atualiza selects abertos se houver
+});
 
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner" style="width:18px;height:18px;border-width:2px"></div> Entrando...';
-
-  try {
-    await signInWithEmailAndPassword(auth, email, senha);
-    // onAuthStateChanged cuida do restante
-  } catch(err) {
-    const msg = AUTH_ERRORS[err.code] || 'Erro ao entrar. Tente novamente.';
-    errEl.textContent = msg;
-    errEl.classList.add('show');
-    btn.disabled = false;
-    btn.innerHTML = '<i class="ti ti-login"></i> Entrar';
+onValue(empRef, snap => {
+  const prev = Object.keys(employees).length;
+  employees  = snap.val() || {};
+  const curr = Object.keys(employees).length;
+  if (firstLoadEmp) {
+    firstLoadEmp = false;
+    hideSplash();
+  } else {
+    const diff = curr - prev;
+    if      (diff > 0)  showNotif(`Outro usuário adicionou ${diff} funcionário(s)`);
+    else if (diff < 0)  showNotif(`Outro usuário removeu ${Math.abs(diff)} funcionário(s)`);
+    else                showNotif('Dados atualizados por outro usuário');
   }
-}
+  setSyncState('ok', 'Conectado');
+  renderAll();
+});
 
-async function fazerLogout() {
-  await signOut(auth);
-  employees = {};
-  firstLoad = true;
-  toast('Sessão encerrada');
-}
-
-window.fazerLogin  = fazerLogin;
-window.fazerLogout = fazerLogout;
-
-// ── BANCO DE DADOS ────────────────────────────────────────────────────────────
-function iniciarDB() {
-  // Conexão / offline
-  const connRef = ref(db, '.info/connected');
-  onValue(connRef, snap => {
-    const online = snap.val() === true;
-    document.getElementById('offline-bar').classList.toggle('show', !online);
-    setSyncState(online ? 'ok' : 'error', online ? 'Conectado' : 'Offline');
-  });
-
-  // Listener realtime de funcionários
-  dbListenerOff = onValue(empRef, snap => {
-    const prev = Object.keys(employees).length;
-    employees  = snap.val() || {};
-    const curr = Object.keys(employees).length;
-
-    if (firstLoad) {
-      firstLoad = false;
-      if (curr === 0) seedData();
-    } else {
-      const diff = curr - prev;
-      if      (diff > 0)  showNotif(`Outro usuário adicionou ${diff} funcionário(s)`);
-      else if (diff < 0)  showNotif(`Outro usuário removeu ${Math.abs(diff)} funcionário(s)`);
-      else                showNotif('Estoque atualizado por outro usuário');
-    }
-
-    setSyncState('ok', 'Conectado');
-    renderAll();
-  });
-}
-
-async function seedData() {
+async function seedUniformes() {
   const seeds = [
-    { nome:'Carlos Mendes',   cargo:'Técnico de Campo', matricula:'001', telefone:'(51) 9 9999-1234',
-      vestuario:{ camisa:{qtd:2,tam:'M'}, calca:{qtd:2,tam:'40'}, bota:{qtd:1,tam:'41'}, bone:{qtd:1,tam:'Único'}, colete:{qtd:2,tam:'M'} } },
-    { nome:'Ana Paula Rocha', cargo:'Técnico de NOC',   matricula:'002', telefone:'(51) 9 9888-5678',
-      vestuario:{ camisa:{qtd:2,tam:'P'}, calca:{qtd:1,tam:'38'}, bota:{qtd:1,tam:'37'} } },
-    { nome:'Rodrigo Lima',    cargo:'Instalador',       matricula:'003', telefone:'(51) 9 9777-9012',
-      vestuario:{ camisa:{qtd:3,tam:'G'}, calca:{qtd:2,tam:'42'}, bota:{qtd:1,tam:'42'}, jaqueta:{qtd:1,tam:'G'}, colete:{qtd:2,tam:'G'}, cinto:{qtd:1,tam:'G'} } },
+    { nome:'Camisa polo',        tamanhos:['P','M','G','GG','XGG'] },
+    { nome:'Calça de trabalho',  tamanhos:['36','38','40','42','44','46','48','50'] },
+    { nome:'Bota de segurança',  tamanhos:['37','38','39','40','41','42','43','44','45'] },
+    { nome:'Boné',               tamanhos:['Único'] },
+    { nome:'Jaqueta',            tamanhos:['P','M','G','GG','XGG'] },
+    { nome:'Colete refletivo',   tamanhos:['P','M','G','GG'] },
+    { nome:'Capa de chuva',      tamanhos:['P','M','G','GG'] },
+    { nome:'Luvas de proteção',  tamanhos:['P','M','G'] },
+    { nome:'Óculos de proteção', tamanhos:['Único'] },
+    { nome:'Cinto de segurança', tamanhos:['P','M','G'] },
   ];
-  for (const s of seeds) await push(empRef, s);
+  for (const s of seeds) await push(unifRef, s);
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 function initials(nome) { return nome.split(' ').slice(0,2).map(n=>n[0]).join('').toUpperCase(); }
-function totalPecas(emp) { return Object.values(emp.vestuario||{}).reduce((s,v)=>s+(v.qtd||0),0); }
-function empList() { return Object.entries(employees).map(([key,val])=>({...val,_key:key})); }
+function empList()  { return Object.entries(employees).map(([k,v])=>({...v,_key:k})); }
+function unifList() { return Object.entries(uniformes).map(([k,v])=>({...v,_key:k})); }
+function totalPecas(emp) {
+  return Object.values(emp.vestuario||{}).reduce((s,arr)=>s+arr.reduce((a,i)=>a+(i.qtd||0),0),0);
+}
 
 function hideSplash() {
   const s = document.getElementById('splash');
@@ -442,9 +371,8 @@ function hideSplash() {
 }
 function setSyncState(state, label) {
   const badge = document.getElementById('sync-badge');
-  const lbl   = document.getElementById('sync-label');
   badge.className = `sync-badge${state !== 'ok' ? ' '+state : ''}`;
-  lbl.textContent = label;
+  document.getElementById('sync-label').textContent = label;
 }
 function showNotif(msg) {
   const el = document.getElementById('notif-banner');
@@ -462,7 +390,6 @@ function showSection(name) {
   document.getElementById('nav-'+name).classList.add('active');
 }
 window.showSection = showSection;
-
 function renderAll() { renderDashboard(); renderFuncionarios(); }
 
 // ── DASHBOARD ─────────────────────────────────────────────────────────────────
@@ -471,11 +398,12 @@ function renderDashboard() {
   const total   = list.length;
   const pecas   = list.reduce((s,e)=>s+totalPecas(e),0);
   const semVest = list.filter(e=>totalPecas(e)===0).length;
+  const tiposUnif = Object.keys(uniformes).length;
   document.getElementById('stats-grid').innerHTML = `
     <div class="stat"><div class="stat-label">Funcionários</div><div class="stat-val">${total}</div></div>
     <div class="stat"><div class="stat-label">Peças distribuídas</div><div class="stat-val">${pecas}</div></div>
     <div class="stat"><div class="stat-label">Sem vestuário</div><div class="stat-val">${semVest}</div></div>
-    <div class="stat"><div class="stat-label">Tipos de item</div><div class="stat-val">${ITEMS.length}</div></div>
+    <div class="stat"><div class="stat-label">Tipos de uniforme</div><div class="stat-val">${tiposUnif}</div></div>
   `;
   const grid = document.getElementById('dash-emp-grid');
   if (!list.length) {
@@ -514,13 +442,15 @@ function empCardHTML(e) {
       <div class="emp-role">${e.cargo} · Matríc. ${e.matricula}</div>
       ${badge}
       <div class="emp-actions" onclick="event.stopPropagation()">
-        <button class="btn btn-sm" onclick="openEstoque('${e._key}')"><i class="ti ti-shirt"></i> Estoque</button>
+        <button class="btn btn-sm" onclick="openEstoque('${e._key}')"><i class="ti ti-shirt"></i> Uniformes</button>
         <button class="btn btn-sm btn-danger" onclick="confirmDesligar('${e._key}')"><i class="ti ti-user-minus"></i> Desligar</button>
       </div>
     </div>`;
 }
 
-// ── CADASTRO ──────────────────────────────────────────────────────────────────
+// ── CADASTRO FUNCIONÁRIO ──────────────────────────────────────────────────────
+const CARGOS = ['Técnico de Campo','Técnico de NOC','Instalador','Supervisor Técnico','Atendimento','TI / Suporte','Administrativo','Gerência'];
+
 function openCadastro() {
   openModal(`
     <div class="modal">
@@ -548,9 +478,7 @@ function openCadastro() {
       </div>
       <div class="modal-footer">
         <button class="btn" onclick="closeModal()">Cancelar</button>
-        <button class="btn btn-primary" id="btn-salvar" onclick="salvarFuncionario()">
-          <i class="ti ti-check"></i> Salvar
-        </button>
+        <button class="btn btn-primary" id="btn-salvar" onclick="salvarFuncionario()"><i class="ti ti-check"></i> Salvar</button>
       </div>
     </div>`);
 }
@@ -568,40 +496,43 @@ async function salvarFuncionario() {
   setSyncState('syncing','Salvando...');
   try {
     await push(empRef, { nome, cargo, matricula:mat, telefone:tel, vestuario:{} });
-    closeModal();
-    toast('Funcionário cadastrado com sucesso!');
+    closeModal(); toast('Funcionário cadastrado com sucesso!');
   } catch(err) {
-    toast('Erro ao salvar. Verifique a conexão.');
-    if (btn) { btn.disabled=false; btn.innerHTML='<i class="ti ti-check"></i> Salvar'; }
+    toast('Erro ao salvar.'); if (btn) { btn.disabled=false; btn.innerHTML='<i class="ti ti-check"></i> Salvar'; }
     setSyncState('error','Erro');
   }
 }
 window.salvarFuncionario = salvarFuncionario;
 
-// ── ESTOQUE ───────────────────────────────────────────────────────────────────
-function openEstoque(key) {
-  const e = employees[key];
+// ── ESTOQUE DO FUNCIONÁRIO ────────────────────────────────────────────────────
+function openEstoque(empKey) {
+  const e = employees[empKey];
   if (!e) return;
-  estoqueEdit = JSON.parse(JSON.stringify(e.vestuario||{}));
-  const rows = ITEMS.map(item => {
-    const v    = estoqueEdit[item.id]||{qtd:0,tam:item.sizes[0]};
-    const opts = item.sizes.map(s=>`<option ${v.tam===s?'selected':''}>${s}</option>`).join('');
-    return `
-      <div class="vest-item">
-        <div class="vest-icon"><i class="ti ${item.icon}"></i></div>
-        <div class="vest-info">
-          <div class="vest-name">${item.nome}</div>
-          <div class="vest-size">Tamanho:
-            <select id="tam-${item.id}" onchange="editTam('${item.id}',this.value)">${opts}</select>
-          </div>
+
+  // vestuario = { unifKey: [ { tam, qtd }, ... ] }
+  const vest = e.vestuario || {};
+
+  const itensHTML = Object.entries(vest).map(([unifKey, pecas]) => {
+    const u = uniformes[unifKey];
+    if (!u) return '';
+    return pecas.map((p, idx) => `
+      <div class="vest-row" id="vest-row-${unifKey}-${idx}">
+        <div class="vest-row-icon"><i class="ti ti-shirt"></i></div>
+        <div class="vest-row-info">
+          <div class="vest-row-name">${u.nome}</div>
+          <div class="vest-row-detail">Tamanho: <strong>${p.tam}</strong> · Quantidade: <strong>${p.qtd}</strong></div>
         </div>
-        <div class="qty-ctrl">
-          <button class="qty-btn" onclick="editQty('${item.id}',-1)">−</button>
-          <span class="qty-val ${v.qtd===0?'qty-zero':''}" id="qty-${item.id}">${v.qtd}</span>
-          <button class="qty-btn" onclick="editQty('${item.id}',1)">+</button>
-        </div>
-      </div>`;
+        <button class="vest-row-del" title="Remover" onclick="removerVestItem('${empKey}','${unifKey}',${idx})">
+          <i class="ti ti-trash" style="font-size:15px"></i>
+        </button>
+      </div>`).join('');
   }).join('');
+
+  const semItens = Object.values(vest).every(arr=>arr.length===0) || Object.keys(vest).length===0;
+
+  const unifOpts = unifList().map(u=>`<option value="${u._key}">${u.nome}</option>`).join('');
+  const semUniformes = unifList().length === 0;
+
   openModal(`
     <div class="modal">
       <div class="modal-header">
@@ -614,72 +545,246 @@ function openEstoque(key) {
         </div>
         <button class="btn-icon" onclick="closeModal()"><i class="ti ti-x"></i></button>
       </div>
-      <div class="section-label">Vestuário e EPIs — use + / − para ajustar quantidade</div>
-      ${rows}
-      <div class="modal-footer" style="justify-content:space-between;">
-        <button class="btn btn-danger" onclick="confirmLimpar('${key}')"><i class="ti ti-trash"></i> Limpar tudo</button>
-        <button class="btn btn-primary" id="btn-salvar-est" onclick="salvarEstoque('${key}')">
-          <i class="ti ti-device-floppy"></i> Salvar e Fechar
-        </button>
+
+      <div class="section-label">Uniformes atribuídos</div>
+
+      <div class="vest-list" id="vest-list-${empKey}">
+        ${semItens
+          ? `<div style="font-size:13px;color:var(--text-muted);padding:8px 0">Nenhum uniforme atribuído ainda.</div>`
+          : itensHTML}
+      </div>
+
+      <div class="section-label" style="margin-top:16px">Adicionar uniforme</div>
+
+      ${semUniformes
+        ? `<div style="font-size:13px;color:var(--text-muted);padding:8px 0">Cadastre uniformes na aba <strong>Uniformes</strong> primeiro.</div>`
+        : `<div class="add-vest-form">
+            <div class="field">
+              <label>Tipo de uniforme</label>
+              <select id="av-tipo">${unifOpts}</select>
+            </div>
+            <div class="field" style="max-width:120px">
+              <label>Tamanho</label>
+              <select id="av-tam"></select>
+            </div>
+            <div class="field" style="max-width:90px">
+              <label>Quantidade</label>
+              <input type="number" id="av-qtd" value="1" min="1" max="99">
+            </div>
+            <button class="btn btn-primary" style="align-self:flex-end" onclick="adicionarVest('${empKey}')">
+              <i class="ti ti-plus"></i> Adicionar
+            </button>
+          </div>`}
+
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="closeModal()"><i class="ti ti-check"></i> Fechar</button>
       </div>
     </div>`);
+
+  // popula tamanhos ao mudar tipo
+  if (!semUniformes) {
+    const tipoSel = document.getElementById('av-tipo');
+    const tamSel  = document.getElementById('av-tam');
+    function atualizarTams() {
+      const u = uniformes[tipoSel.value];
+      if (!u) return;
+      tamSel.innerHTML = (u.tamanhos||[]).map(t=>`<option>${t}</option>`).join('');
+    }
+    tipoSel.addEventListener('change', atualizarTams);
+    atualizarTams();
+  }
 }
 window.openEstoque = openEstoque;
 
-function editQty(itemId, delta) {
-  if (!estoqueEdit[itemId]) estoqueEdit[itemId] = {qtd:0, tam:ITEMS.find(i=>i.id===itemId).sizes[0]};
-  estoqueEdit[itemId].qtd = Math.max(0,(estoqueEdit[itemId].qtd||0)+delta);
-  const span = document.getElementById(`qty-${itemId}`);
-  if (span) { span.textContent=estoqueEdit[itemId].qtd; span.className='qty-val'+(estoqueEdit[itemId].qtd===0?' qty-zero':''); }
-}
-window.editQty = editQty;
+async function adicionarVest(empKey) {
+  const tipoKey = document.getElementById('av-tipo').value;
+  const tam     = document.getElementById('av-tam').value;
+  const qtd     = parseInt(document.getElementById('av-qtd').value)||1;
+  if (!tipoKey || !tam) { toast('Selecione o tipo e tamanho'); return; }
 
-function editTam(itemId, val) {
-  if (!estoqueEdit[itemId]) estoqueEdit[itemId]={qtd:0,tam:val};
-  else estoqueEdit[itemId].tam=val;
-}
-window.editTam = editTam;
+  const e = employees[empKey];
+  if (!e) return;
 
-async function salvarEstoque(key) {
-  const btn = document.getElementById('btn-salvar-est');
+  // Clona vestuario
+  const vest = JSON.parse(JSON.stringify(e.vestuario||{}));
+  if (!vest[tipoKey]) vest[tipoKey] = [];
+  vest[tipoKey].push({ tam, qtd });
+
+  setSyncState('syncing','Salvando...');
+  try {
+    await update(ref(db,`employees/${empKey}`), { vestuario: vest });
+    toast('Uniforme adicionado!');
+    // Reabre o modal para refletir
+    openEstoque(empKey);
+  } catch(err) {
+    toast('Erro ao salvar.'); setSyncState('error','Erro');
+  }
+}
+window.adicionarVest = adicionarVest;
+
+async function removerVestItem(empKey, unifKey, idx) {
+  const e = employees[empKey];
+  if (!e) return;
+  const vest = JSON.parse(JSON.stringify(e.vestuario||{}));
+  if (!vest[unifKey]) return;
+  vest[unifKey].splice(idx, 1);
+  if (vest[unifKey].length === 0) delete vest[unifKey];
+
+  setSyncState('syncing','Removendo...');
+  try {
+    await update(ref(db,`employees/${empKey}`), { vestuario: vest });
+    toast('Uniforme removido');
+    openEstoque(empKey);
+  } catch(err) {
+    toast('Erro ao remover.'); setSyncState('error','Erro');
+  }
+}
+window.removerVestItem = removerVestItem;
+
+// ── UNIFORMES (TIPOS) ─────────────────────────────────────────────────────────
+function renderUniformes() {
+  const list = unifList();
+  const el   = document.getElementById('uniformes-list');
+  if (!el) return;
+  if (!list.length) {
+    el.innerHTML = `<div class="empty"><i class="ti ti-shirt"></i><p>Nenhum uniforme cadastrado.<br>Clique em "Novo uniforme" para começar.</p></div>`;
+    return;
+  }
+  el.innerHTML = list.map(u => `
+    <div class="uniform-card">
+      <div class="uniform-icon"><i class="ti ti-shirt"></i></div>
+      <div class="uniform-info">
+        <div class="uniform-name">${u.nome}</div>
+        <div class="uniform-sizes">Tamanhos: ${(u.tamanhos||[]).join(', ') || '—'}</div>
+      </div>
+      <div class="uniform-actions">
+        <button class="btn btn-sm" onclick="openEditarUniforme('${u._key}')"><i class="ti ti-pencil"></i> Editar</button>
+        <button class="btn btn-sm btn-danger" onclick="confirmExcluirUniforme('${u._key}')"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+
+// Cadastrar uniforme
+let sizesTemp = [];
+
+function openCadastroUniforme(editKey) {
+  const isEdit = !!editKey;
+  const u = isEdit ? uniformes[editKey] : null;
+  sizesTemp = isEdit ? [...(u.tamanhos||[])] : [];
+
+  openModal(`
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">${isEdit ? 'Editar uniforme' : 'Novo uniforme'}</span>
+        <button class="btn-icon" onclick="closeModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="form-row" style="margin-bottom:14px">
+        <label>Nome do uniforme *</label>
+        <input type="text" id="u-nome" placeholder="Ex: Camisa polo" value="${isEdit ? u.nome : ''}">
+      </div>
+      <div class="form-row" style="margin-bottom:6px">
+        <label>Tamanhos disponíveis</label>
+        <div class="sizes-input-wrap" id="sizes-wrap" onclick="document.getElementById('sizes-input').focus()">
+          <span id="sizes-tags"></span>
+          <input type="text" id="sizes-input" placeholder="Digite e pressione Enter..." style="width:auto;border:none;outline:none;background:transparent;font-size:13px;color:var(--text);min-width:120px;padding:0;font-family:inherit">
+        </div>
+        <div class="hint">Ex: P, M, G, GG — ou 38, 40, 42 — pressione Enter ou vírgula para adicionar</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-primary" id="btn-salvar-unif" onclick="salvarUniforme('${editKey||''}')">
+          <i class="ti ti-check"></i> ${isEdit ? 'Salvar alterações' : 'Cadastrar'}
+        </button>
+      </div>
+    </div>`);
+
+  renderSizeTags();
+
+  const inp = document.getElementById('sizes-input');
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      addSizeTag(inp.value);
+      inp.value = '';
+    } else if (e.key === 'Backspace' && inp.value === '' && sizesTemp.length) {
+      sizesTemp.pop();
+      renderSizeTags();
+    }
+  });
+  inp.addEventListener('blur', () => {
+    if (inp.value.trim()) { addSizeTag(inp.value); inp.value = ''; }
+  });
+}
+window.openCadastroUniforme = openCadastroUniforme;
+
+function addSizeTag(val) {
+  const v = val.trim().replace(/,/g,'');
+  if (v && !sizesTemp.includes(v)) { sizesTemp.push(v); renderSizeTags(); }
+}
+
+function renderSizeTags() {
+  const wrap = document.getElementById('sizes-tags');
+  if (!wrap) return;
+  wrap.innerHTML = sizesTemp.map((s,i)=>`
+    <span class="size-tag">${s}
+      <button onclick="removeSizeTag(${i})" type="button">×</button>
+    </span>`).join('');
+}
+window.removeSizeTag = function(i) { sizesTemp.splice(i,1); renderSizeTags(); };
+
+async function salvarUniforme(editKey) {
+  const nome = document.getElementById('u-nome').value.trim();
+  if (!nome) { toast('Informe o nome do uniforme'); return; }
+  // captura o que está no input antes de salvar
+  const inp = document.getElementById('sizes-input');
+  if (inp && inp.value.trim()) addSizeTag(inp.value);
+
+  const btn = document.getElementById('btn-salvar-unif');
   if (btn) { btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> Salvando...'; }
   setSyncState('syncing','Salvando...');
   try {
-    await update(ref(db,`employees/${key}`),{vestuario:estoqueEdit});
+    if (editKey) {
+      await update(ref(db,`uniformes/${editKey}`), { nome, tamanhos: sizesTemp });
+    } else {
+      await push(unifRef, { nome, tamanhos: sizesTemp });
+    }
     closeModal();
-    toast('Estoque salvo com sucesso!');
+    toast(editKey ? 'Uniforme atualizado!' : 'Uniforme cadastrado!');
   } catch(err) {
-    toast('Erro ao salvar. Verifique a conexão.');
-    if (btn) { btn.disabled=false; btn.innerHTML='<i class="ti ti-device-floppy"></i> Salvar e Fechar'; }
+    toast('Erro ao salvar.'); if (btn) { btn.disabled=false; }
     setSyncState('error','Erro');
   }
 }
-window.salvarEstoque = salvarEstoque;
+window.salvarUniforme = salvarUniforme;
 
-function confirmLimpar(key) {
-  const e = employees[key];
+function openEditarUniforme(key) { openCadastroUniforme(key); }
+window.openEditarUniforme = openEditarUniforme;
+
+function confirmExcluirUniforme(key) {
+  const u = uniformes[key];
   openModal(`
     <div class="modal confirm-modal">
       <div class="confirm-icon"><i class="ti ti-alert-triangle"></i></div>
-      <div class="confirm-title">Limpar estoque de ${e.nome}?</div>
-      <div class="confirm-msg">Todos os itens serão zerados. Esta ação não pode ser desfeita.</div>
+      <div class="confirm-title">Excluir "${u.nome}"?</div>
+      <div class="confirm-msg">O tipo de uniforme será removido do sistema. Os registros já atribuídos a funcionários não serão afetados.</div>
       <div style="display:flex;gap:8px;justify-content:flex-end;">
-        <button class="btn" onclick="openEstoque('${key}')">Cancelar</button>
-        <button class="btn btn-danger" onclick="limparEstoque('${key}')"><i class="ti ti-trash"></i> Limpar</button>
+        <button class="btn" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-danger" onclick="excluirUniforme('${key}')"><i class="ti ti-trash"></i> Excluir</button>
       </div>
     </div>`);
 }
-window.confirmLimpar = confirmLimpar;
+window.confirmExcluirUniforme = confirmExcluirUniforme;
 
-async function limparEstoque(key) {
-  setSyncState('syncing','Salvando...');
+async function excluirUniforme(key) {
+  setSyncState('syncing','Removendo...');
   try {
-    await update(ref(db,`employees/${key}`),{vestuario:{}});
-    closeModal(); toast('Estoque limpo com sucesso');
-  } catch(err) { toast('Erro ao limpar.'); setSyncState('error','Erro'); }
+    await remove(ref(db,`uniformes/${key}`));
+    closeModal(); toast('Uniforme excluído');
+  } catch(err) { toast('Erro ao excluir.'); setSyncState('error','Erro'); }
 }
-window.limparEstoque = limparEstoque;
+window.excluirUniforme = excluirUniforme;
 
+// ── DESLIGAR FUNCIONÁRIO ──────────────────────────────────────────────────────
 function confirmDesligar(key) {
   const e = employees[key];
   if (!e) return;
@@ -687,7 +792,7 @@ function confirmDesligar(key) {
     <div class="modal confirm-modal">
       <div class="confirm-icon"><i class="ti ti-user-minus"></i></div>
       <div class="confirm-title">Desligar ${e.nome}?</div>
-      <div class="confirm-msg">O funcionário e todo o seu estoque serão removidos permanentemente.</div>
+      <div class="confirm-msg">O funcionário e todo o seu vestuário serão removidos permanentemente.</div>
       <div style="display:flex;gap:8px;justify-content:flex-end;">
         <button class="btn" onclick="closeModal()">Cancelar</button>
         <button class="btn btn-danger" id="btn-desligar" onclick="desligar('${key}')"><i class="ti ti-trash"></i> Desligar</button>
@@ -703,9 +808,7 @@ async function desligar(key) {
   try {
     await remove(ref(db,`employees/${key}`));
     closeModal(); toast('Funcionário desligado e estoque removido');
-  } catch(err) {
-    toast('Erro ao remover.'); if (btn) btn.disabled=false; setSyncState('error','Erro');
-  }
+  } catch(err) { toast('Erro ao remover.'); if (btn) btn.disabled=false; setSyncState('error','Erro'); }
 }
 window.desligar = desligar;
 
@@ -715,7 +818,7 @@ function openModal(html) {
   document.getElementById('modal-overlay').classList.remove('hidden');
 }
 function closeModal() {
-  estoqueEdit={};
+  sizesTemp=[];
   document.getElementById('modal-overlay').classList.add('hidden');
 }
 function overlayClick(e) {
@@ -734,3 +837,4 @@ window.toast=toast;
 </script>
 </body>
 </html>
+
