@@ -8,6 +8,15 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
+    --bg: #ffffff; --bg-secondary: #f5f5f4; --bg-tertiary: #efefed;
+    --text: #1a1a18; --text-secondary: #6b6b67; --text-muted: #9b9b97;
+    --border: rgba(0,0,0,0.12); --border-md: rgba(0,0,0,0.22);
+    --blue: #185FA5; --blue-bg: #E6F1FB; --blue-text: #0C447C;
+    --green: #3B6D11; --green-bg: #EAF3DE; --green-text: #27500A;
+    --amber-bg: #FAEEDA; --amber-text: #633806;
+    --red: #A32D2D; --red-bg: #FCEBEB; --red-text: #791F1F;
+    --radius: 8px; --radius-lg: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
     --bg:#ffffff; --bg-secondary:#f5f5f4; --bg-tertiary:#efefed;
     --text:#1a1a18; --text-secondary:#6b6b67; --text-muted:#9b9b97;
     --border:rgba(0,0,0,0.12); --border-md:rgba(0,0,0,0.22);
@@ -15,10 +24,18 @@
     --green:#3B6D11; --green-bg:#EAF3DE; --green-text:#27500A;
     --amber-bg:#FAEEDA; --amber-text:#633806;
     --red:#A32D2D; --red-bg:#FCEBEB; --red-text:#791F1F;
-    --purple-bg:#F0EBFC; --purple-text:#5B21B6;
     --radius:8px; --radius-lg:12px;
     --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
   }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a; --bg-secondary: #252523; --bg-tertiary: #2e2e2b;
+      --text: #f0efe8; --text-secondary: #a8a89f; --text-muted: #6b6b62;
+      --border: rgba(255,255,255,0.10); --border-md: rgba(255,255,255,0.20);
+      --blue: #378ADD; --blue-bg: #042C53; --blue-text: #85B7EB;
+      --green: #639922; --green-bg: #173404; --green-text: #C0DD97;
+      --amber-bg: #412402; --amber-text: #FAC775;
+      --red: #E24B4A; --red-bg: #501313; --red-text: #F7C1C1;
   @media(prefers-color-scheme:dark){
     :root{
       --bg:#1c1c1a; --bg-secondary:#252523; --bg-tertiary:#2e2e2b;
@@ -28,9 +45,175 @@
       --green:#639922; --green-bg:#173404; --green-text:#C0DD97;
       --amber-bg:#412402; --amber-text:#FAC775;
       --red:#E24B4A; --red-bg:#501313; --red-text:#F7C1C1;
-      --purple-bg:#2D1B69; --purple-text:#C4B5FD;
     }
   }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg-tertiary); color: var(--text); font-size: 15px; line-height: 1.5; min-height: 100vh; }
+
+  /* SPLASH */
+  .splash { position: fixed; inset: 0; background: var(--bg-tertiary); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 16px; transition: opacity 0.35s; }
+  .splash.hidden { opacity: 0; pointer-events: none; }
+  .splash-logo { width: 60px; height: 60px; border-radius: 16px; background: var(--blue); display: flex; align-items: center; justify-content: center; }
+  .splash-logo i { color: #E6F1FB; font-size: 30px; }
+  .splash p { font-size: 13px; color: var(--text-secondary); }
+  .spinner { width: 22px; height: 22px; border: 2.5px solid var(--border-md); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* LAYOUT */
+  .app-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
+  .topbar { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 50; gap: 12px; }
+  .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .logo { width: 34px; height: 34px; border-radius: var(--radius); background: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .logo i { color: #E6F1FB; font-size: 18px; }
+  .app-title { font-size: 16px; font-weight: 600; color: var(--text); white-space: nowrap; }
+  .app-sub { font-size: 11px; color: var(--text-secondary); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .sync-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 3px 9px; border-radius: 999px; background: var(--green-bg); color: var(--green-text); font-weight: 500; transition: background 0.3s, color 0.3s; white-space: nowrap; }
+  .sync-badge.syncing { background: var(--amber-bg); color: var(--amber-text); }
+  .sync-badge.error { background: var(--red-bg); color: var(--red-text); }
+  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  .sync-badge.syncing .sync-dot { animation: pulse 0.8s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .nav { display: flex; gap: 4px; }
+  .nav-btn { padding: 6px 14px; border-radius: var(--radius); border: 0.5px solid transparent; background: transparent; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .nav-btn:hover:not(.active) { background: var(--bg-secondary); color: var(--text); }
+  .nav-btn.active { background: var(--blue-bg); color: var(--blue-text); border-color: rgba(24,95,165,0.2); font-weight: 500; }
+  .main { flex: 1; padding: 1.5rem; max-width: 960px; margin: 0 auto; width: 100%; }
+  .section { display: none; }
+  .section.visible { display: block; }
+
+  /* STATS */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  .stat { background: var(--bg); border-radius: var(--radius); padding: 14px 16px; border: 0.5px solid var(--border); }
+  .stat-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-val { font-size: 26px; font-weight: 600; color: var(--text); }
+
+  /* EMPLOYEE GRID */
+  .emp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .emp-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+  .emp-card:hover { border-color: var(--border-md); box-shadow: var(--shadow); }
+  .emp-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--blue-bg); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; color: var(--blue-text); margin-bottom: 10px; }
+  .emp-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .emp-role { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 999px; }
+  .badge-ok { background: var(--green-bg); color: var(--green-text); }
+  .badge-warn { background: var(--amber-bg); color: var(--amber-text); }
+  .emp-actions { display: flex; gap: 6px; margin-top: 10px; }
+
+  /* UNIFORMES LIST */
+  .uniforms-list { display: flex; flex-direction: column; gap: 10px; }
+  .uniform-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .uniform-icon { width: 38px; height: 38px; border-radius: var(--radius); background: var(--blue-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .uniform-icon i { font-size: 18px; color: var(--blue-text); }
+  .uniform-info { flex: 1; min-width: 0; }
+  .uniform-name { font-size: 14px; font-weight: 500; color: var(--text); }
+  .uniform-sizes { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .uniform-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+  /* VEST ITEMS NO FUNCIONÁRIO */
+  .vest-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .vest-row {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--bg-secondary); border-radius: var(--radius);
+    padding: 10px 12px; border: 0.5px solid var(--border);
+  }
+  .vest-row-icon { width: 32px; height: 32px; border-radius: var(--radius); background: var(--blue-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .vest-row-icon i { font-size: 15px; color: var(--blue-text); }
+  .vest-row-info { flex: 1; min-width: 0; }
+  .vest-row-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .vest-row-detail { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
+  .vest-row-del { padding: 5px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); border-radius: var(--radius); transition: all 0.15s; flex-shrink: 0; }
+  .vest-row-del:hover { background: var(--red-bg); color: var(--red-text); }
+
+  .add-vest-form { background: var(--bg-secondary); border: 0.5px dashed var(--border-md); border-radius: var(--radius); padding: 12px; display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; }
+  .add-vest-form .field { display: flex; flex-direction: column; gap: 4px; min-width: 120px; flex: 1; }
+  .add-vest-form label { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+  .add-vest-form select, .add-vest-form input { font-size: 13px; padding: 7px 10px; }
+
+  /* SIZES TAG INPUT */
+  .sizes-input-wrap { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 6px 8px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: var(--bg); min-height: 38px; cursor: text; }
+  .size-tag { display: inline-flex; align-items: center; gap: 4px; background: var(--blue-bg); color: var(--blue-text); font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 999px; }
+  .size-tag button { background: none; border: none; cursor: pointer; color: inherit; opacity: 0.6; padding: 0; font-size: 13px; line-height: 1; display: flex; align-items: center; }
+  .size-tag button:hover { opacity: 1; }
+  .sizes-input-wrap input { border: none; outline: none; background: transparent; font-size: 13px; color: var(--text); min-width: 60px; flex: 1; padding: 0; font-family: inherit; }
+
+  /* BUTTONS */
+  .btn { padding: 7px 14px; border-radius: var(--radius); border: 0.5px solid var(--border-md); background: transparent; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .btn:hover { background: var(--bg-secondary); color: var(--text); }
+  .btn:disabled { opacity: 0.45; pointer-events: none; }
+  .btn-primary { background: var(--blue); border-color: var(--blue); color: #E6F1FB; font-weight: 500; }
+  .btn-primary:hover { opacity: 0.88; background: var(--blue); color: #E6F1FB; }
+  .btn-danger { border-color: var(--red); color: var(--red-text); }
+  .btn-danger:hover { background: var(--red-bg); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .btn-icon { padding: 6px; border: none; background: transparent; cursor: pointer; color: var(--text-secondary); border-radius: var(--radius); }
+  .btn-icon:hover { background: var(--bg-secondary); }
+
+  /* TOOLBAR */
+  .toolbar { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; }
+  .toolbar input { flex: 1; }
+
+  /* FORM */
+  input[type=text], input[type=tel], input[type=number], select {
+    width: 100%; padding: 7px 10px; border-radius: var(--radius);
+    border: 0.5px solid var(--border-md); background: var(--bg); color: var(--text);
+    font-size: 13px; font-family: inherit; transition: border-color 0.15s; outline: none;
+  }
+  input:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
+  select { cursor: pointer; }
+  label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 5px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-row { margin-bottom: 0; }
+  .col-full { grid-column: 1 / -1; }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 1rem; }
+  .modal-overlay.hidden { display: none; }
+  .modal { background: var(--bg); border-radius: var(--radius-lg); border: 0.5px solid var(--border); padding: 1.25rem; width: 520px; max-width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.18); }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 12px; }
+  .modal-title { font-size: 16px; font-weight: 500; color: var(--text); }
+  .modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; padding-top: 1rem; border-top: 0.5px solid var(--border); }
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
+
+  /* CONFIRM */
+  .confirm-modal { width: 360px; }
+  .confirm-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--red-bg); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+  .confirm-icon i { color: var(--red-text); font-size: 20px; }
+  .confirm-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+  .confirm-msg { font-size: 13px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 1.25rem; }
+
+  /* EMPTY */
+  .empty { text-align: center; padding: 3rem 1rem; color: var(--text-secondary); }
+  .empty i { font-size: 40px; opacity: 0.3; display: block; margin-bottom: 10px; }
+  .empty p { font-size: 14px; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: #1a1a18; color: #f0efe8; padding: 10px 20px; border-radius: 999px; font-size: 13px; font-weight: 500; z-index: 999; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
+  .toast.show { opacity: 1; }
+
+  /* NOTIF */
+  .notif-banner { position: fixed; top: 64px; right: 1rem; background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 10px 14px; font-size: 12px; color: var(--text-secondary); box-shadow: var(--shadow); z-index: 300; opacity: 0; transform: translateY(-6px); transition: opacity 0.25s, transform 0.25s; pointer-events: none; max-width: 280px; }
+  .notif-banner.show { opacity: 1; transform: translateY(0); }
+  .notif-banner strong { color: var(--text); }
+
+  /* DETAIL */
+  .detail-emp-header { display: flex; align-items: center; gap: 12px; flex: 1; }
+  .detail-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--blue-bg); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px; color: var(--blue-text); flex-shrink: 0; }
+  .section-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.03em; text-transform: uppercase; margin-bottom: 12px; }
+
+  .offline-bar { display: none; background: var(--red-bg); color: var(--red-text); font-size: 12px; font-weight: 500; text-align: center; padding: 7px; border-bottom: 0.5px solid var(--red); }
+  .offline-bar.show { display: block; }
+
+  .hint { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+
+  @media (max-width: 640px) {
+    .topbar { padding: 0 1rem; flex-wrap: wrap; height: auto; padding-top: 8px; padding-bottom: 8px; gap: 8px; }
+    .main { padding: 1rem; }
+    .app-sub { display: none; }
+    .form-grid { grid-template-columns: 1fr; }
+    .col-full { grid-column: 1; }
+    .nav-btn span { display: none; }
+    .sync-badge span { display: none; }
+    .add-vest-form { flex-direction: column; }
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg-tertiary);color:var(--text);font-size:15px;line-height:1.5;min-height:100vh;}
   .splash{position:fixed;inset:0;background:var(--bg-tertiary);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;transition:opacity .35s;}
   .splash.hidden{opacity:0;pointer-events:none;}
@@ -72,20 +255,14 @@
   .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 8px;border-radius:999px;}
   .badge-ok{background:var(--green-bg);color:var(--green-text);}
   .badge-warn{background:var(--amber-bg);color:var(--amber-text);}
-  .badge-pending{background:var(--purple-bg);color:var(--purple-text);}
   .emp-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
   .uniforms-list{display:flex;flex-direction:column;gap:10px;}
   .uniform-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;display:flex;align-items:center;gap:12px;}
-  .uniform-icon{width:38px;height:38px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .uniform-icon.epi{background:var(--amber-bg);}
-  .uniform-icon.epi i{color:var(--amber-text);}
-  .uniform-icon.normal{background:var(--blue-bg);}
-  .uniform-icon.normal i{color:var(--blue-text);}
+  .uniform-icon{width:38px;height:38px;border-radius:var(--radius);background:var(--blue-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .uniform-icon i{font-size:18px;color:var(--blue-text);}
   .uniform-info{flex:1;min-width:0;}
-  .uniform-name{font-size:14px;font-weight:500;color:var(--text);display:flex;align-items:center;gap:7px;}
-  .epi-tag{font-size:10px;font-weight:600;background:var(--amber-bg);color:var(--amber-text);padding:1px 6px;border-radius:999px;text-transform:uppercase;}
+  .uniform-name{font-size:14px;font-weight:500;color:var(--text);}
   .uniform-sizes{font-size:12px;color:var(--text-secondary);margin-top:2px;}
-  .uniform-ca{font-size:11px;color:var(--text-muted);margin-top:1px;}
   .uniform-actions{display:flex;gap:6px;flex-shrink:0;}
   .vest-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
   .vest-row{display:flex;align-items:center;gap:10px;background:var(--bg-secondary);border-radius:var(--radius);padding:10px 12px;border:0.5px solid var(--border);}
@@ -97,7 +274,7 @@
   .vest-row-del{padding:5px;border:none;background:transparent;cursor:pointer;color:var(--text-muted);border-radius:var(--radius);transition:all .15s;flex-shrink:0;}
   .vest-row-del:hover{background:var(--red-bg);color:var(--red-text);}
   .add-vest-form{background:var(--bg-secondary);border:0.5px dashed var(--border-md);border-radius:var(--radius);padding:12px;display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;}
-  .add-vest-form .field{display:flex;flex-direction:column;gap:4px;min-width:100px;flex:1;}
+  .add-vest-form .field{display:flex;flex-direction:column;gap:4px;min-width:120px;flex:1;}
   .add-vest-form label{font-size:11px;color:var(--text-secondary);font-weight:500;}
   .sizes-input-wrap{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 8px;border-radius:var(--radius);border:0.5px solid var(--border-md);background:var(--bg);min-height:38px;cursor:text;}
   .size-tag{display:inline-flex;align-items:center;gap:4px;background:var(--blue-bg);color:var(--blue-text);font-size:12px;font-weight:500;padding:2px 8px;border-radius:999px;}
@@ -111,33 +288,27 @@
   .btn-primary:hover{opacity:.88;background:var(--blue);color:#E6F1FB;}
   .btn-danger{border-color:var(--red);color:var(--red-text);}
   .btn-danger:hover{background:var(--red-bg);}
-  .btn-green{background:var(--green);border-color:var(--green);color:#EAF3DE;font-weight:500;}
-  .btn-green:hover{opacity:.88;background:var(--green);color:#EAF3DE;}
   .btn-sm{padding:5px 10px;font-size:12px;}
   .btn-icon{padding:6px;border:none;background:transparent;cursor:pointer;color:var(--text-secondary);border-radius:var(--radius);}
   .btn-icon:hover{background:var(--bg-secondary);}
   .toolbar{display:flex;gap:8px;margin-bottom:1rem;align-items:center;}
   .toolbar input{flex:1;}
-  input[type=text],input[type=tel],input[type=number],input[type=date],select,textarea{width:100%;padding:7px 10px;border-radius:var(--radius);border:0.5px solid var(--border-md);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;transition:border-color .15s;outline:none;}
-  input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(24,95,165,0.12);}
+  input[type=text],input[type=tel],input[type=number],input[type=date],select{width:100%;padding:7px 10px;border-radius:var(--radius);border:0.5px solid var(--border-md);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;transition:border-color .15s;outline:none;}
+  input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(24,95,165,0.12);}
   select{cursor:pointer;}
   label{font-size:12px;color:var(--text-secondary);display:block;margin-bottom:5px;}
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   .form-row{margin-bottom:0;}
   .col-full{grid-column:1/-1;}
-  .checkbox-row{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg-secondary);border-radius:var(--radius);border:0.5px solid var(--border);cursor:pointer;}
-  .checkbox-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--blue);cursor:pointer;flex-shrink:0;}
-  .checkbox-row span{font-size:13px;color:var(--text);}
-  .checkbox-row .cb-sub{font-size:11px;color:var(--text-secondary);}
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:200;padding:1rem;}
   .modal-overlay.hidden{display:none;}
   .modal{background:var(--bg);border-radius:var(--radius-lg);border:0.5px solid var(--border);padding:1.25rem;width:560px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.18);}
-  .modal-wide{width:680px;}
+  .modal-wide{width:700px;}
   .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;gap:12px;}
   .modal-title{font-size:16px;font-weight:500;color:var(--text);}
   .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:1.25rem;padding-top:1rem;border-top:0.5px solid var(--border);}
   .section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-secondary);margin-bottom:10px;padding-bottom:6px;border-bottom:0.5px solid var(--border);}
-  .confirm-modal{width:380px;}
+  .confirm-modal{width:360px;}
   .confirm-icon{width:44px;height:44px;border-radius:50%;background:var(--red-bg);display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
   .confirm-icon i{color:var(--red-text);font-size:20px;}
   .confirm-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:6px;}
@@ -156,36 +327,40 @@
   .offline-bar{display:none;background:var(--red-bg);color:var(--red-text);font-size:12px;font-weight:500;text-align:center;padding:7px;border-bottom:0.5px solid var(--red);}
   .offline-bar.show{display:block;}
   .hint{font-size:12px;color:var(--text-muted);margin-top:5px;}
+
+  /* TABS */
   .modal-tabs{display:flex;gap:2px;margin-bottom:1.25rem;background:var(--bg-secondary);border-radius:var(--radius);padding:3px;}
   .modal-tab{flex:1;padding:7px;border:none;border-radius:6px;background:transparent;font-size:13px;color:var(--text-secondary);cursor:pointer;transition:all .15s;font-family:inherit;}
   .modal-tab.active{background:var(--bg);color:var(--text);font-weight:500;box-shadow:var(--shadow);}
-  .recibo-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;display:flex;align-items:center;gap:12px;}
+
+  /* RECIBOS */
+  .recibo-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color .15s;}
   .recibo-card:hover{border-color:var(--border-md);}
   .recibo-icon{width:38px;height:38px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
   .recibo-icon.entrega{background:var(--green-bg);}
   .recibo-icon.entrega i{color:var(--green-text);}
   .recibo-icon.devolucao{background:var(--amber-bg);}
   .recibo-icon.devolucao i{color:var(--amber-text);}
-  .recibo-icon.pendente{background:var(--purple-bg);}
-  .recibo-icon.pendente i{color:var(--purple-text);}
   .recibo-info{flex:1;min-width:0;}
   .recibo-title{font-size:13px;font-weight:500;color:var(--text);}
   .recibo-meta{font-size:11px;color:var(--text-secondary);margin-top:2px;}
-  .recibo-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;}
+  .recibo-actions{display:flex;gap:6px;flex-shrink:0;}
   .recibo-list{display:flex;flex-direction:column;gap:8px;}
+
+  /* RECIBO ITEMS */
   .recibo-item-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-secondary);border-radius:var(--radius);border:0.5px solid var(--border);}
   .recibo-item-row .ri-info{flex:1;font-size:13px;color:var(--text);}
   .recibo-item-row .ri-detail{font-size:11px;color:var(--text-secondary);}
-  /* link box */
-  .link-box{background:var(--bg-secondary);border:0.5px solid var(--border-md);border-radius:var(--radius);padding:12px 14px;margin-top:12px;}
-  .link-box-title{font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;}
-  .link-url{font-size:12px;color:var(--blue-text);word-break:break-all;margin-bottom:10px;background:var(--bg);padding:8px 10px;border-radius:var(--radius);border:0.5px solid var(--border);}
-  .link-actions{display:flex;gap:8px;flex-wrap:wrap;}
-  /* status badge */
-  .status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-  .status-dot.assinado{background:var(--green);}
-  .status-dot.pendente{background:var(--purple-text);}
-  /* recibo view */
+
+  /* ASSINATURA */
+  .sig-wrap{border:0.5px solid var(--border-md);border-radius:var(--radius);overflow:hidden;background:#fff;position:relative;}
+  .sig-wrap canvas{display:block;width:100%;touch-action:none;}
+  .sig-clear{position:absolute;top:6px;right:6px;padding:4px 10px;border-radius:var(--radius);border:0.5px solid var(--border-md);background:var(--bg);font-size:11px;color:var(--text-secondary);cursor:pointer;}
+  .sig-clear:hover{background:var(--bg-secondary);}
+  .sig-placeholder{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--text-muted);pointer-events:none;white-space:nowrap;}
+
+  /* VISUALIZAR RECIBO */
+  .recibo-view{background:var(--bg);border-radius:var(--radius-lg);}
   .recibo-view-header{background:var(--blue);color:#fff;padding:20px 24px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
   .recibo-view-header h2{font-size:18px;font-weight:700;margin-bottom:4px;}
   .recibo-view-header p{font-size:12px;opacity:.8;}
@@ -200,6 +375,7 @@
   .tipo-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;}
   .tipo-badge.entrega{background:var(--green-bg);color:var(--green-text);}
   .tipo-badge.devolucao{background:var(--amber-bg);color:var(--amber-text);}
+
   @media(max-width:640px){
     .topbar{padding:0 1rem;flex-wrap:wrap;height:auto;padding-top:8px;padding-bottom:8px;gap:8px;}
     .main{padding:1rem;}
@@ -213,140 +389,297 @@
   }
 </style>
 </head>
-<body>
-<div class="splash" id="splash">
-  <div class="splash-logo"><i class="ti ti-shirt"></i></div>
-  <div class="spinner"></div>
-  <p>Conectando ao banco de dados...</p>
-</div>
-<div class="offline-bar" id="offline-bar"><i class="ti ti-wifi-off"></i> Sem conexão — as alterações serão sincronizadas quando a conexão for restabelecida</div>
-<div class="app-wrapper">
-  <header class="topbar">
-    <div class="topbar-left">
-      <div class="logo"><i class="ti ti-shirt"></i></div>
-      <div>
-        <div class="app-title">Viu internet — Vestuário</div>
-        <div class="app-sub">Controle de Vestuário · Provedor de Internet</div>
+@@ -226,47 +231,30 @@
+        <span id="sync-label">Conectando</span>
       </div>
-    </div>
-    <div class="topbar-right">
-      <div class="sync-badge syncing" id="sync-badge"><span class="sync-dot"></span><span id="sync-label">Conectando</span></div>
       <nav class="nav">
+        <button class="nav-btn active" id="nav-dashboard" onclick="showSection('dashboard')">
+          <i class="ti ti-layout-dashboard"></i><span>Painel</span>
+        </button>
+        <button class="nav-btn" id="nav-funcionarios" onclick="showSection('funcionarios')">
+          <i class="ti ti-users"></i><span>Funcionários</span>
+        </button>
+        <button class="nav-btn" id="nav-uniformes" onclick="showSection('uniformes')">
+          <i class="ti ti-shirt"></i><span>Uniformes</span>
+        </button>
         <button class="nav-btn active" id="nav-dashboard" onclick="showSection('dashboard')"><i class="ti ti-layout-dashboard"></i><span>Painel</span></button>
         <button class="nav-btn" id="nav-funcionarios" onclick="showSection('funcionarios')"><i class="ti ti-users"></i><span>Funcionários</span></button>
         <button class="nav-btn" id="nav-uniformes" onclick="showSection('uniformes')"><i class="ti ti-shirt"></i><span>Uniformes</span></button>
       </nav>
     </div>
   </header>
+
   <main class="main">
+    <!-- DASHBOARD -->
     <div id="sec-dashboard" class="section visible">
       <div class="stats" id="stats-grid"></div>
       <div class="section-title">Funcionários ativos</div>
       <div id="dash-emp-grid" class="emp-grid"></div>
     </div>
+
+    <!-- FUNCIONÁRIOS -->
     <div id="sec-funcionarios" class="section">
       <div class="toolbar">
         <input type="text" id="search-input" placeholder="Buscar por nome, matrícula ou cargo..." oninput="renderFuncionarios()">
+        <button class="btn btn-primary" onclick="openCadastro()">
+          <i class="ti ti-user-plus"></i> Cadastrar
+        </button>
         <button class="btn btn-primary" onclick="openCadastro()"><i class="ti ti-user-plus"></i> Cadastrar</button>
       </div>
       <div id="emp-grid" class="emp-grid"></div>
     </div>
+
+    <!-- UNIFORMES -->
     <div id="sec-uniformes" class="section">
       <div class="toolbar">
-        <div style="font-size:13px;color:var(--text-secondary);flex:1">Gerencie os tipos de uniforme e EPIs disponíveis no sistema</div>
+        <div style="font-size:13px;color:var(--text-secondary);flex:1">
+          Gerencie os tipos de uniforme disponíveis no sistema
+        </div>
+        <button class="btn btn-primary" onclick="openCadastroUniforme()">
+          <i class="ti ti-plus"></i> Novo uniforme
+        </button>
+        <div style="font-size:13px;color:var(--text-secondary);flex:1">Gerencie os tipos de uniforme disponíveis no sistema</div>
         <button class="btn btn-primary" onclick="openCadastroUniforme()"><i class="ti ti-plus"></i> Novo uniforme</button>
       </div>
       <div id="uniformes-list" class="uniforms-list"></div>
     </div>
-  </main>
-</div>
-<div id="modal-overlay" class="modal-overlay hidden" onclick="overlayClick(event)"><div id="modal-content"></div></div>
-<div id="toast" class="toast"></div>
+@@ -280,382 +268,612 @@
 <div id="notif-banner" class="notif-banner"></div>
 
 <script type="module">
 import { initializeApp }           from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getDatabase, ref, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+import { initializeApp }             from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getDatabase, ref, onValue,
+         push, remove, update, set } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+         push, remove, update }      from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
 
-const firebaseConfig={apiKey:"AIzaSyBx0Yozdw0lpWBwUKTG6nDVQnh9iBMgZHU",authDomain:"vestuario-viu.firebaseapp.com",databaseURL:"https://vestuario-viu-default-rtdb.firebaseio.com",projectId:"vestuario-viu",storageBucket:"vestuario-viu.firebasestorage.app",messagingSenderId:"314992937343",appId:"1:314992937343:web:dde451d2447fd4dcdc724a"};
-const app=initializeApp(firebaseConfig);
-const db=getDatabase(app);
-const empRef=ref(db,'employees');
-const unifRef=ref(db,'uniformes');
+const firebaseConfig = {
+  apiKey:            "AIzaSyBx0Yozdw0lpWBwUKTG6nDVQnh9iBMgZHU",
+  authDomain:        "vestuario-viu.firebaseapp.com",
+  databaseURL:       "https://vestuario-viu-default-rtdb.firebaseio.com",
+  projectId:         "vestuario-viu",
+  storageBucket:     "vestuario-viu.firebasestorage.app",
+  messagingSenderId: "314992937343",
+  appId:             "1:314992937343:web:dde451d2447fd4dcdc724a"
+  apiKey:"AIzaSyBx0Yozdw0lpWBwUKTG6nDVQnh9iBMgZHU",
+  authDomain:"vestuario-viu.firebaseapp.com",
+  databaseURL:"https://vestuario-viu-default-rtdb.firebaseio.com",
+  projectId:"vestuario-viu",
+  storageBucket:"vestuario-viu.firebasestorage.app",
+  messagingSenderId:"314992937343",
+  appId:"1:314992937343:web:dde451d2447fd4dcdc724a"
+};
 
-// URL da página de assinatura
-const SIGN_URL='https://felpsret.github.io/assinatura/';
+const app     = initializeApp(firebaseConfig);
+const db      = getDatabase(app);
+const empRef  = ref(db, 'employees');
+const unifRef = ref(db, 'uniformes');
 
-let employees={},uniformes={};
-let firstLoadEmp=true,firstLoadUnif=true;
-let sizesTemp=[],reciboItens=[];
+// ── ESTADO ────────────────────────────────────────────────────────────────────
+let employees  = {};
+let uniformes  = {};  // { key: { nome, tamanhos: ['P','M','G'] } }
+let firstLoadEmp  = true;
+let firstLoadUnif = true;
 
-onValue(ref(db,'.info/connected'),snap=>{
+// ── CONEXÃO ───────────────────────────────────────────────────────────────────
+onValue(ref(db, '.info/connected'), snap => {
+  const online = snap.val() === true;
+  document.getElementById('offline-bar').classList.toggle('show', !online);
+  setSyncState(online ? 'ok' : 'error', online ? 'Conectado' : 'Offline');
+const empRef  = ref(db,'employees');
+const unifRef = ref(db,'uniformes');
+
+let employees={}, uniformes={};
+let firstLoadEmp=true, firstLoadUnif=true;
+let sizesTemp=[];
+// estado do recibo em criação
+let reciboItens=[];
+let sigCanvas=null, sigCtx=null, sigDrawing=false;
+
+// ── CONEXÃO ────────────────────────────────────────────────────────────────────
+onValue(ref(db,'.info/connected'), snap=>{
   const on=snap.val()===true;
   document.getElementById('offline-bar').classList.toggle('show',!on);
-  setSyncState(on?'ok':'error',on?'Conectado':'Offline');
+  setSyncState(on?'ok':'error', on?'Conectado':'Offline');
 });
-onValue(unifRef,snap=>{
+
+// ── LISTENERS ─────────────────────────────────────────────────────────────────
+onValue(unifRef, snap => {
+  uniformes = snap.val() || {};
+  if (firstLoadUnif) {
+    firstLoadUnif = false;
+    if (Object.keys(uniformes).length === 0) seedUniformes();
+  }
+onValue(unifRef, snap=>{
   uniformes=snap.val()||{};
-  if(firstLoadUnif){firstLoadUnif=false;if(!Object.keys(uniformes).length)seedUniformes();}
+  if(firstLoadUnif){ firstLoadUnif=false; if(!Object.keys(uniformes).length) seedUniformes(); }
   renderUniformes();
+  // atualiza selects abertos se houver
 });
-onValue(empRef,snap=>{
+
+onValue(empRef, snap => {
+  const prev = Object.keys(employees).length;
+  employees  = snap.val() || {};
+  const curr = Object.keys(employees).length;
+  if (firstLoadEmp) {
+    firstLoadEmp = false;
+    hideSplash();
+  } else {
+    const diff = curr - prev;
+    if      (diff > 0)  showNotif(`Outro usuário adicionou ${diff} funcionário(s)`);
+    else if (diff < 0)  showNotif(`Outro usuário removeu ${Math.abs(diff)} funcionário(s)`);
+    else                showNotif('Dados atualizados por outro usuário');
+onValue(empRef, snap=>{
   const prev=Object.keys(employees).length;
   employees=snap.val()||{};
   const curr=Object.keys(employees).length;
-  if(firstLoadEmp){firstLoadEmp=false;hideSplash();}
-  else{const d=curr-prev;showNotif(d>0?`Outro usuário adicionou ${d} funcionário(s)`:d<0?`Outro usuário removeu ${Math.abs(d)} funcionário(s)`:'Dados atualizados por outro usuário');}
+  if(firstLoadEmp){ firstLoadEmp=false; hideSplash(); }
+  else{
+    const d=curr-prev;
+    showNotif(d>0?`Outro usuário adicionou ${d} funcionário(s)`:d<0?`Outro usuário removeu ${Math.abs(d)} funcionário(s)`:'Dados atualizados por outro usuário');
+  }
+  setSyncState('ok', 'Conectado');
   setSyncState('ok','Conectado');
   renderAll();
 });
 
+async function seedUniformes() {
+  const seeds = [
+    { nome:'Camisa polo',        tamanhos:['P','M','G','GG','XGG'] },
+    { nome:'Calça de trabalho',  tamanhos:['36','38','40','42','44','46','48','50'] },
+    { nome:'Bota de segurança',  tamanhos:['37','38','39','40','41','42','43','44','45'] },
+    { nome:'Boné',               tamanhos:['Único'] },
+    { nome:'Jaqueta',            tamanhos:['P','M','G','GG','XGG'] },
+    { nome:'Colete refletivo',   tamanhos:['P','M','G','GG'] },
+    { nome:'Capa de chuva',      tamanhos:['P','M','G','GG'] },
+    { nome:'Luvas de proteção',  tamanhos:['P','M','G'] },
+    { nome:'Óculos de proteção', tamanhos:['Único'] },
+    { nome:'Cinto de segurança', tamanhos:['P','M','G'] },
 async function seedUniformes(){
   const s=[
-    {nome:'Camisa polo',tamanhos:['P','M','G','GG','XGG'],epi:false,ca:''},
-    {nome:'Calça de trabalho',tamanhos:['36','38','40','42','44','46','48','50'],epi:false,ca:''},
-    {nome:'Bota de segurança',tamanhos:['37','38','39','40','41','42','43','44','45'],epi:true,ca:''},
-    {nome:'Boné',tamanhos:['Único'],epi:false,ca:''},
-    {nome:'Jaqueta',tamanhos:['P','M','G','GG','XGG'],epi:false,ca:''},
-    {nome:'Colete refletivo',tamanhos:['P','M','G','GG'],epi:true,ca:''},
-    {nome:'Capa de chuva',tamanhos:['P','M','G','GG'],epi:false,ca:''},
-    {nome:'Luvas de proteção',tamanhos:['P','M','G'],epi:true,ca:''},
-    {nome:'Óculos de proteção',tamanhos:['Único'],epi:true,ca:''},
-    {nome:'Cinto de segurança',tamanhos:['P','M','G'],epi:true,ca:''},
+    {nome:'Camisa polo',tamanhos:['P','M','G','GG','XGG']},
+    {nome:'Calça de trabalho',tamanhos:['36','38','40','42','44','46','48','50']},
+    {nome:'Bota de segurança',tamanhos:['37','38','39','40','41','42','43','44','45']},
+    {nome:'Boné',tamanhos:['Único']},
+    {nome:'Jaqueta',tamanhos:['P','M','G','GG','XGG']},
+    {nome:'Colete refletivo',tamanhos:['P','M','G','GG']},
+    {nome:'Capa de chuva',tamanhos:['P','M','G','GG']},
+    {nome:'Luvas de proteção',tamanhos:['P','M','G']},
+    {nome:'Óculos de proteção',tamanhos:['Único']},
+    {nome:'Cinto de segurança',tamanhos:['P','M','G']},
   ];
+  for (const s of seeds) await push(unifRef, s);
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function initials(nome) { return nome.split(' ').slice(0,2).map(n=>n[0]).join('').toUpperCase(); }
+function empList()  { return Object.entries(employees).map(([k,v])=>({...v,_key:k})); }
+function unifList() { return Object.entries(uniformes).map(([k,v])=>({...v,_key:k})); }
+function totalPecas(emp) {
+  return Object.values(emp.vestuario||{}).reduce((s,arr)=>s+arr.reduce((a,i)=>a+(i.qtd||0),0),0);
   for(const i of s) await push(unifRef,i);
 }
 
-// helpers
+function hideSplash() {
+  const s = document.getElementById('splash');
+  s.classList.add('hidden');
+  setTimeout(()=>s.remove(), 400);
+// ── HELPERS ────────────────────────────────────────────────────────────────────
 function initials(n){return n.split(' ').slice(0,2).map(x=>x[0]).join('').toUpperCase();}
 function empList(){return Object.entries(employees).map(([k,v])=>({...v,_key:k}));}
 function unifList(){return Object.entries(uniformes).map(([k,v])=>({...v,_key:k}));}
 function totalPecas(e){return Object.values(e.vestuario||{}).reduce((s,a)=>s+a.reduce((x,i)=>x+(i.qtd||0),0),0);}
-function fmtDate(ts){if(!ts)return'—';const d=new Date(ts);return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+function fmtDate(ts){
+  if(!ts) return '—';
+  const d=new Date(ts);
+  return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+function setSyncState(state, label) {
+  const badge = document.getElementById('sync-badge');
+  badge.className = `sync-badge${state !== 'ok' ? ' '+state : ''}`;
+  document.getElementById('sync-label').textContent = label;
 function hideSplash(){const s=document.getElementById('splash');s.classList.add('hidden');setTimeout(()=>s.remove(),400);}
-function setSyncState(state,label){const b=document.getElementById('sync-badge');b.className=`sync-badge${state!=='ok'?' '+state:''}`;document.getElementById('sync-label').textContent=label;}
-function showNotif(msg){const el=document.getElementById('notif-banner');el.innerHTML=`<i class="ti ti-refresh" style="margin-right:6px;font-size:13px"></i><strong>Atualização:</strong> ${msg}`;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3500);}
+function setSyncState(state,label){
+  const b=document.getElementById('sync-badge');
+  b.className=`sync-badge${state!=='ok'?' '+state:''}`;
+  document.getElementById('sync-label').textContent=label;
+}
+function showNotif(msg) {
+  const el = document.getElementById('notif-banner');
+  el.innerHTML = `<i class="ti ti-refresh" style="margin-right:6px;font-size:13px"></i><strong>Atualização:</strong> ${msg}`;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>el.classList.remove('show'), 3500);
+function showNotif(msg){
+  const el=document.getElementById('notif-banner');
+  el.innerHTML=`<i class="ti ti-refresh" style="margin-right:6px;font-size:13px"></i><strong>Atualização:</strong> ${msg}`;
+  el.classList.add('show'); clearTimeout(el._t);
+  el._t=setTimeout(()=>el.classList.remove('show'),3500);
+}
 
+// ── NAV ───────────────────────────────────────────────────────────────────────
+function showSection(name) {
+// ── NAV ────────────────────────────────────────────────────────────────────────
 function showSection(n){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('visible'));
+  document.getElementById('sec-'+name).classList.add('visible');
   document.getElementById('sec-'+n).classList.add('visible');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-'+name).classList.add('active');
+}
+window.showSection = showSection;
+function renderAll() { renderDashboard(); renderFuncionarios(); }
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function renderDashboard() {
+  const list    = empList();
+  const total   = list.length;
+  const pecas   = list.reduce((s,e)=>s+totalPecas(e),0);
+  const semVest = list.filter(e=>totalPecas(e)===0).length;
+  const tiposUnif = Object.keys(uniformes).length;
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat"><div class="stat-label">Funcionários</div><div class="stat-val">${total}</div></div>
+    <div class="stat"><div class="stat-label">Peças distribuídas</div><div class="stat-val">${pecas}</div></div>
+    <div class="stat"><div class="stat-label">Sem vestuário</div><div class="stat-val">${semVest}</div></div>
+    <div class="stat"><div class="stat-label">Tipos de uniforme</div><div class="stat-val">${tiposUnif}</div></div>
   document.getElementById('nav-'+n).classList.add('active');
 }
 window.showSection=showSection;
 function renderAll(){renderDashboard();renderFuncionarios();}
 
-// dashboard
+// ── DASHBOARD ──────────────────────────────────────────────────────────────────
 function renderDashboard(){
   const list=empList();
   const totalRecibos=list.reduce((s,e)=>s+Object.keys(e.recibos||{}).length,0);
-  const pendentes=list.reduce((s,e)=>s+Object.values(e.recibos||{}).filter(r=>!r.assinatura).length,0);
   document.getElementById('stats-grid').innerHTML=`
     <div class="stat"><div class="stat-label">Funcionários</div><div class="stat-val">${list.length}</div></div>
     <div class="stat"><div class="stat-label">Peças distribuídas</div><div class="stat-val">${list.reduce((s,e)=>s+totalPecas(e),0)}</div></div>
     <div class="stat"><div class="stat-label">Recibos gerados</div><div class="stat-val">${totalRecibos}</div></div>
-    <div class="stat"><div class="stat-label">Aguard. assinatura</div><div class="stat-val">${pendentes}</div></div>
+    <div class="stat"><div class="stat-label">Tipos de uniforme</div><div class="stat-val">${Object.keys(uniformes).length}</div></div>
   `;
+  const grid = document.getElementById('dash-emp-grid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><i class="ti ti-users"></i><p>Nenhum funcionário cadastrado ainda</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(e=>empCardHTML(e)).join('');
+}
+
+// ── FUNCIONÁRIOS ──────────────────────────────────────────────────────────────
+function renderFuncionarios() {
+  const q  = (document.getElementById('search-input')||{}).value||'';
+  const ql = q.toLowerCase();
+  const list = empList().filter(e=>
+    e.nome.toLowerCase().includes(ql) ||
+    (e.matricula||'').includes(q) ||
+    (e.cargo||'').toLowerCase().includes(ql)
+  );
+  const grid = document.getElementById('emp-grid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><i class="ti ti-search"></i><p>Nenhum funcionário encontrado</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(e=>empCardHTML(e)).join('');
   const g=document.getElementById('dash-emp-grid');
   if(!list.length){g.innerHTML=`<div class="empty" style="grid-column:1/-1"><i class="ti ti-users"></i><p>Nenhum funcionário cadastrado ainda</p></div>`;return;}
   g.innerHTML=list.map(e=>empCardHTML(e)).join('');
@@ -361,147 +694,239 @@ function renderFuncionarios(){
   g.innerHTML=list.map(e=>empCardHTML(e)).join('');
 }
 
+function empCardHTML(e) {
+  const tv = totalPecas(e);
+  const badge = tv > 0
+    ? `<span class="badge badge-ok"><i class="ti ti-check" style="font-size:11px"></i> ${tv} peças</span>`
+    : `<span class="badge badge-warn"><i class="ti ti-alert-triangle" style="font-size:11px"></i> Sem itens</span>`;
 function empCardHTML(e){
   const tv=totalPecas(e);
-  const recibos=Object.values(e.recibos||{});
-  const nr=recibos.length;
-  const pendentes=recibos.filter(r=>!r.assinatura).length;
-  const badge=tv>0?`<span class="badge badge-ok"><i class="ti ti-check" style="font-size:11px"></i> ${tv} peças</span>`:`<span class="badge badge-warn"><i class="ti ti-alert-triangle" style="font-size:11px"></i> Sem itens</span>`;
-  const pbadge=pendentes>0?`<span class="badge badge-pending" style="margin-left:4px"><i class="ti ti-clock" style="font-size:11px"></i> ${pendentes} pendente(s)</span>`:'';
+  const nr=Object.keys(e.recibos||{}).length;
+  const badge=tv>0
+    ?`<span class="badge badge-ok"><i class="ti ti-check" style="font-size:11px"></i> ${tv} peças</span>`
+    :`<span class="badge badge-warn"><i class="ti ti-alert-triangle" style="font-size:11px"></i> Sem itens</span>`;
   return `
+    <div class="emp-card" onclick="openEstoque('${e._key}')">
     <div class="emp-card" onclick="openFuncionarioModal('${e._key}','uniformes')">
       <div class="emp-avatar">${initials(e.nome)}</div>
       <div class="emp-name">${e.nome}</div>
       <div class="emp-role">${e.cargo} · Matríc. ${e.matricula}</div>
-      ${badge}${pbadge}
+      ${badge}
       <div class="emp-actions" onclick="event.stopPropagation()">
+        <button class="btn btn-sm" onclick="openEstoque('${e._key}')"><i class="ti ti-shirt"></i> Uniformes</button>
         <button class="btn btn-sm" onclick="openFuncionarioModal('${e._key}','uniformes')"><i class="ti ti-shirt"></i> Uniformes</button>
-        <button class="btn btn-sm" onclick="openFuncionarioModal('${e._key}','recibos')"><i class="ti ti-file-text"></i> Recibos${nr>0?' ('+nr+')':''}</button>
+        <button class="btn btn-sm" onclick="openFuncionarioModal('${e._key}','recibos')"><i class="ti ti-file-text"></i> Recibos ${nr>0?`(${nr})`:''}</button>
         <button class="btn btn-sm btn-danger" onclick="confirmDesligar('${e._key}')"><i class="ti ti-user-minus"></i> Desligar</button>
       </div>
     </div>`;
 }
 
-// modal funcionário com tabs
-function openFuncionarioModal(empKey,tab='uniformes'){
-  const e=employees[empKey];if(!e)return;
+// ── CADASTRO FUNCIONÁRIO ──────────────────────────────────────────────────────
+const CARGOS = ['Técnico de Campo','Técnico de NOC','Instalador','Supervisor Técnico','Atendimento','TI / Suporte','Administrativo','Gerência'];
+
+function openCadastro() {
+// ── MODAL FUNCIONÁRIO (tabs) ───────────────────────────────────────────────────
+function openFuncionarioModal(empKey, tab='uniformes'){
+  const e=employees[empKey]; if(!e) return;
   openModal(`
+    <div class="modal">
     <div class="modal modal-wide">
       <div class="modal-header">
+        <span class="modal-title">Cadastrar funcionário</span>
+        <button class="btn-icon" onclick="closeModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="form-grid">
+        <div class="form-row col-full">
+          <label>Nome completo *</label>
+          <input type="text" id="f-nome" placeholder="Ex: João da Silva">
+        </div>
+        <div class="form-row">
+          <label>Matrícula *</label>
+          <input type="text" id="f-mat" placeholder="Ex: 004">
+        </div>
+        <div class="form-row">
+          <label>Telefone</label>
+          <input type="tel" id="f-tel" placeholder="(51) 9 0000-0000">
+        </div>
+        <div class="form-row col-full">
+          <label>Cargo</label>
+          <select id="f-cargo">${CARGOS.map(c=>`<option>${c}</option>`).join('')}</select>
         <div class="detail-emp-header">
           <div class="detail-avatar">${initials(e.nome)}</div>
-          <div><div class="modal-title">${e.nome}</div><div style="font-size:12px;color:var(--text-secondary)">${e.cargo} · Matríc. ${e.matricula}${e.telefone?' · '+e.telefone:''}</div></div>
+          <div>
+            <div class="modal-title">${e.nome}</div>
+            <div style="font-size:12px;color:var(--text-secondary)">${e.cargo} · Matríc. ${e.matricula}${e.telefone?' · '+e.telefone:''}</div>
+          </div>
         </div>
         <button class="btn-icon" onclick="closeModal()"><i class="ti ti-x"></i></button>
       </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-primary" id="btn-salvar" onclick="salvarFuncionario()"><i class="ti ti-check"></i> Salvar</button>
       <div class="modal-tabs">
         <button class="modal-tab${tab==='uniformes'?' active':''}" onclick="switchTab('${empKey}','uniformes',this)"><i class="ti ti-shirt" style="font-size:13px"></i> Uniformes</button>
         <button class="modal-tab${tab==='recibos'?' active':''}" onclick="switchTab('${empKey}','recibos',this)"><i class="ti ti-file-text" style="font-size:13px"></i> Recibos</button>
       </div>
       <div id="tab-content"></div>
     </div>`);
-  renderTab(empKey,tab);
+  renderTab(empKey, tab);
 }
+window.openCadastro = openCadastro;
+
+async function salvarFuncionario() {
+  const nome  = document.getElementById('f-nome').value.trim();
+  const mat   = document.getElementById('f-mat').value.trim();
+  const tel   = document.getElementById('f-tel').value.trim();
+  const cargo = document.getElementById('f-cargo').value;
+  if (!nome||!mat) { toast('Preencha nome e matrícula'); return; }
+  if (empList().find(e=>e.matricula===mat)) { toast('Matrícula já cadastrada'); return; }
+  const btn = document.getElementById('btn-salvar');
+  if (btn) { btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> Salvando...'; }
+  setSyncState('syncing','Salvando...');
+  try {
+    await push(empRef, { nome, cargo, matricula:mat, telefone:tel, vestuario:{} });
+    closeModal(); toast('Funcionário cadastrado com sucesso!');
+  } catch(err) {
+    toast('Erro ao salvar.'); if (btn) { btn.disabled=false; btn.innerHTML='<i class="ti ti-check"></i> Salvar'; }
+    setSyncState('error','Erro');
+  }
+}
+window.salvarFuncionario = salvarFuncionario;
+
+// ── ESTOQUE DO FUNCIONÁRIO ────────────────────────────────────────────────────
+function openEstoque(empKey) {
+  const e = employees[empKey];
+  if (!e) return;
 window.openFuncionarioModal=openFuncionarioModal;
 
-function switchTab(empKey,tab,el){document.querySelectorAll('.modal-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderTab(empKey,tab);}
+  // vestuario = { unifKey: [ { tam, qtd }, ... ] }
+  const vest = e.vestuario || {};
+function switchTab(empKey, tab, el){
+  document.querySelectorAll('.modal-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderTab(empKey, tab);
+}
 window.switchTab=switchTab;
 
-function renderTab(empKey,tab){
-  const el=document.getElementById('tab-content');if(!el)return;
-  if(tab==='uniformes')el.innerHTML=uniformesTabHTML(empKey);
-  else el.innerHTML=recibosTabHTML(empKey);
-  if(tab==='uniformes')initUniformesTab(empKey);
+function renderTab(empKey, tab){
+  const el=document.getElementById('tab-content');
+  if(!el) return;
+  if(tab==='uniformes') el.innerHTML=uniformesTabHTML(empKey);
+  else                  el.innerHTML=recibosTabHTML(empKey);
+  if(tab==='uniformes') initUniformesTab(empKey);
 }
 
-// tab uniformes
+  const itensHTML = Object.entries(vest).map(([unifKey, pecas]) => {
+    const u = uniformes[unifKey];
+    if (!u) return '';
+    return pecas.map((p, idx) => `
+      <div class="vest-row" id="vest-row-${unifKey}-${idx}">
+// ── TAB UNIFORMES ──────────────────────────────────────────────────────────────
 function uniformesTabHTML(empKey){
-  const e=employees[empKey];if(!e)return'';
+  const e=employees[empKey]; if(!e) return '';
   const vest=e.vestuario||{};
   const itensHTML=Object.entries(vest).map(([uk,pecas])=>{
-    const u=uniformes[uk];if(!u)return'';
+    const u=uniformes[uk]; if(!u) return '';
     return pecas.map((p,i)=>`
       <div class="vest-row">
-        <div class="vest-row-icon"><i class="ti ti-${u.epi?'shield-check':'shirt'}"></i></div>
+        <div class="vest-row-icon"><i class="ti ti-shirt"></i></div>
         <div class="vest-row-info">
-          <div class="vest-row-name">${u.nome}${u.epi?` <span class="epi-tag">EPI</span>`:''}</div>
-          <div class="vest-row-detail">Tam: <strong>${p.tam}</strong> · Qtd: <strong>${p.qtd}</strong>${u.epi&&u.ca?` · CA: <strong>${u.ca}</strong>`:''}</div>
+          <div class="vest-row-name">${u.nome}</div>
+          <div class="vest-row-detail">Tamanho: <strong>${p.tam}</strong> · Quantidade: <strong>${p.qtd}</strong></div>
+          <div class="vest-row-detail">Tamanho: <strong>${p.tam}</strong> · Qtd: <strong>${p.qtd}</strong></div>
         </div>
+        <button class="vest-row-del" title="Remover" onclick="removerVestItem('${empKey}','${unifKey}',${idx})">
+          <i class="ti ti-trash" style="font-size:15px"></i>
+        </button>
         <button class="vest-row-del" onclick="removerVestItem('${empKey}','${uk}',${i})"><i class="ti ti-trash" style="font-size:15px"></i></button>
       </div>`).join('');
   }).join('');
-  const vazio=!Object.keys(vest).length||Object.values(vest).every(a=>!a.length);
-  const uOpts=unifList().map(u=>`<option value="${u._key}">${u.nome}${u.epi?' (EPI)':''}</option>`).join('');
+  const vazio=Object.values(vest).every(a=>!a.length)||!Object.keys(vest).length;
+  const uOpts=unifList().map(u=>`<option value="${u._key}">${u.nome}</option>`).join('');
+  const semU=!unifList().length;
   return `
     <div class="section-label">Uniformes atribuídos</div>
     <div class="vest-list">${vazio?`<div style="font-size:13px;color:var(--text-muted);padding:8px 0">Nenhum uniforme atribuído ainda.</div>`:itensHTML}</div>
     <div class="section-label" style="margin-top:16px">Adicionar uniforme</div>
-    ${!unifList().length?`<div style="font-size:13px;color:var(--text-muted);padding:8px 0">Cadastre uniformes na aba Uniformes primeiro.</div>`:`
+    ${semU?`<div style="font-size:13px;color:var(--text-muted);padding:8px 0">Cadastre uniformes na aba <strong>Uniformes</strong> primeiro.</div>`:`
       <div class="add-vest-form">
         <div class="field"><label>Tipo</label><select id="av-tipo">${uOpts}</select></div>
         <div class="field" style="max-width:120px"><label>Tamanho</label><select id="av-tam"></select></div>
-        <div class="field" style="max-width:90px"><label>Qtd</label><input type="number" id="av-qtd" value="1" min="1" max="99"></div>
+        <div class="field" style="max-width:90px"><label>Quantidade</label><input type="number" id="av-qtd" value="1" min="1" max="99"></div>
         <button class="btn btn-primary" style="align-self:flex-end" onclick="adicionarVest('${empKey}')"><i class="ti ti-plus"></i> Adicionar</button>
       </div>`}
     <div class="modal-footer"><button class="btn btn-primary" onclick="closeModal()"><i class="ti ti-check"></i> Fechar</button></div>`;
 }
+
+  const semItens = Object.values(vest).every(arr=>arr.length===0) || Object.keys(vest).length===0;
 function initUniformesTab(empKey){
-  const t=document.getElementById('av-tipo'),s=document.getElementById('av-tam');
-  if(!t||!s)return;
-  function upd(){const u=uniformes[t.value];s.innerHTML=(u?.tamanhos||[]).map(x=>`<option>${x}</option>`).join('');}
-  t.addEventListener('change',upd);upd();
+  const tipoSel=document.getElementById('av-tipo');
+  const tamSel=document.getElementById('av-tam');
+  if(!tipoSel||!tamSel) return;
+  function atualizarTams(){
+    const u=uniformes[tipoSel.value];
+    tamSel.innerHTML=(u?.tamanhos||[]).map(t=>`<option>${t}</option>`).join('');
+  }
+  tipoSel.addEventListener('change',atualizarTams);
+  atualizarTams();
 }
+
+  const unifOpts = unifList().map(u=>`<option value="${u._key}">${u.nome}</option>`).join('');
+  const semUniformes = unifList().length === 0;
 async function adicionarVest(empKey){
-  const tk=document.getElementById('av-tipo').value,tam=document.getElementById('av-tam').value,qtd=parseInt(document.getElementById('av-qtd').value)||1;
-  if(!tk||!tam){toast('Selecione tipo e tamanho');return;}
-  const e=employees[empKey];if(!e)return;
+  const tipoKey=document.getElementById('av-tipo').value;
+  const tam=document.getElementById('av-tam').value;
+  const qtd=parseInt(document.getElementById('av-qtd').value)||1;
+  if(!tipoKey||!tam){toast('Selecione o tipo e tamanho');return;}
+  const e=employees[empKey]; if(!e) return;
   const vest=JSON.parse(JSON.stringify(e.vestuario||{}));
-  if(!vest[tk])vest[tk]=[];
-  vest[tk].push({tam,qtd});
+  if(!vest[tipoKey]) vest[tipoKey]=[];
+  vest[tipoKey].push({tam,qtd});
   setSyncState('syncing','Salvando...');
-  try{await update(ref(db,`employees/${empKey}`),{vestuario:vest});toast('Uniforme adicionado!');renderTab(empKey,'uniformes');}
-  catch(err){toast('Erro ao salvar.');setSyncState('error','Erro');}
+  try{
+    await update(ref(db,`employees/${empKey}`),{vestuario:vest});
+    toast('Uniforme adicionado!');
+    renderTab(empKey,'uniformes');
+  }catch(err){toast('Erro ao salvar.');setSyncState('error','Erro');}
 }
 window.adicionarVest=adicionarVest;
+
 async function removerVestItem(empKey,unifKey,idx){
-  const e=employees[empKey];if(!e)return;
+  const e=employees[empKey]; if(!e) return;
   const vest=JSON.parse(JSON.stringify(e.vestuario||{}));
-  if(!vest[unifKey])return;
+  if(!vest[unifKey]) return;
   vest[unifKey].splice(idx,1);
-  if(!vest[unifKey].length)delete vest[unifKey];
+  if(!vest[unifKey].length) delete vest[unifKey];
   setSyncState('syncing','Removendo...');
-  try{await update(ref(db,`employees/${empKey}`),{vestuario:vest});toast('Uniforme removido');renderTab(empKey,'uniformes');}
-  catch(err){toast('Erro ao remover.');setSyncState('error','Erro');}
+  try{
+    await update(ref(db,`employees/${empKey}`),{vestuario:vest});
+    toast('Uniforme removido');
+    renderTab(empKey,'uniformes');
+  }catch(err){toast('Erro ao remover.');setSyncState('error','Erro');}
 }
 window.removerVestItem=removerVestItem;
 
-// tab recibos
+// ── TAB RECIBOS ────────────────────────────────────────────────────────────────
 function recibosTabHTML(empKey){
-  const e=employees[empKey];if(!e)return'';
+  const e=employees[empKey]; if(!e) return '';
   const recibos=e.recibos||{};
-  const list=Object.entries(recibos).map(([k,v])=>({...v,_key:k})).sort((a,b)=>(b.criadoEm||0)-(a.criadoEm||0));
-  const listHTML=list.length?list.map(r=>{
-    const assinado=!!r.assinatura;
-    const tipo=r.tipo||'entrega';
-    return `
+  const list=Object.entries(recibos)
+    .map(([k,v])=>({...v,_key:k}))
+    .sort((a,b)=>(b.criadoEm||0)-(a.criadoEm||0));
+  const listHTML=list.length
+    ? list.map(r=>`
       <div class="recibo-card">
-        <div class="recibo-icon ${assinado?tipo:'pendente'}"><i class="ti ti-${assinado?(tipo==='entrega'?'arrow-down-circle':'arrow-up-circle'):'clock'}"></i></div>
+        <div class="recibo-icon ${r.tipo}"><i class="ti ti-${r.tipo==='entrega'?'arrow-down-circle':'arrow-up-circle'}"></i></div>
         <div class="recibo-info">
-          <div class="recibo-title" style="display:flex;align-items:center;gap:7px">
-            ${tipo==='entrega'?'Entrega':'Devolução'} · ${(r.itens||[]).length} item(ns)
-            <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:${assinado?'var(--green-text)':'var(--purple-text)'}">
-              <span class="status-dot ${assinado?'assinado':'pendente'}"></span>${assinado?'Assinado':'Aguardando assinatura'}
-            </span>
-          </div>
-          <div class="recibo-meta">${fmtDate(r.criadoEm)} · Resp: ${r.responsavel||'—'}</div>
+          <div class="recibo-title">${r.tipo==='entrega'?'Entrega':'Devolução'} · ${(r.itens||[]).length} item(ns)</div>
+          <div class="recibo-meta">${fmtDate(r.criadoEm)} · Responsável: ${r.responsavel||'—'}</div>
         </div>
         <div class="recibo-actions">
-          ${!assinado?`<button class="btn btn-sm" onclick="mostrarLinkAssinatura('${empKey}','${r._key}')"><i class="ti ti-link"></i> Link</button>`:''}
           <button class="btn btn-sm" onclick="verRecibo('${empKey}','${r._key}')"><i class="ti ti-eye"></i> Ver</button>
           <button class="btn btn-sm btn-danger" onclick="confirmExcluirRecibo('${empKey}','${r._key}')"><i class="ti ti-trash"></i></button>
         </div>
-      </div>`;
-  }).join(''):`<div class="empty"><i class="ti ti-file-off"></i><p>Nenhum recibo gerado ainda.</p></div>`;
+      </div>`).join('')
+    : `<div class="empty"><i class="ti ti-file-off"></i><p>Nenhum recibo gerado ainda.</p></div>`;
   return `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
       <div class="section-label" style="margin-bottom:0;border:none;padding:0">Histórico de recibos</div>
@@ -511,99 +936,207 @@ function recibosTabHTML(empKey){
     <div class="modal-footer"><button class="btn btn-primary" onclick="closeModal()"><i class="ti ti-check"></i> Fechar</button></div>`;
 }
 
-// mostrar link de assinatura
-function mostrarLinkAssinatura(empKey,reciboKey){
-  const link=`${SIGN_URL}?emp=${empKey}&rec=${reciboKey}`;
-  const waLink=`https://wa.me/?text=${encodeURIComponent('Olá! Clique no link para assinar o recibo de uniforme: '+link)}`;
-  openModal(`
-    <div class="modal">
-      <div class="modal-header">
-        <span class="modal-title">Enviar para assinatura</span>
-        <button class="btn-icon" onclick="openFuncionarioModal('${empKey}','recibos')"><i class="ti ti-x"></i></button>
-      </div>
-      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:14px">
-        Compartilhe o link abaixo com o funcionário para que ele assine pelo celular.
-      </div>
-      <div class="link-box">
-        <div class="link-box-title">Link de assinatura</div>
-        <div class="link-url" id="link-url">${link}</div>
-        <div class="link-actions">
-          <button class="btn btn-sm" onclick="copiarLink('${link}')"><i class="ti ti-copy"></i> Copiar link</button>
-          <a href="${waLink}" target="_blank" class="btn btn-sm btn-green" style="text-decoration:none"><i class="ti ti-brand-whatsapp"></i> Enviar via WhatsApp</a>
-        </div>
-      </div>
-      <div class="hint" style="margin-top:10px">Após o funcionário assinar, o recibo será atualizado automaticamente.</div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" onclick="openFuncionarioModal('${empKey}','recibos')">Voltar</button>
-      </div>
-    </div>`);
-}
-window.mostrarLinkAssinatura=mostrarLinkAssinatura;
-
-function copiarLink(link){navigator.clipboard.writeText(link).then(()=>toast('Link copiado!')).catch(()=>toast('Não foi possível copiar'));}
-window.copiarLink=copiarLink;
-
-// novo recibo
+// ── NOVO RECIBO ────────────────────────────────────────────────────────────────
 function abrirNovoRecibo(empKey){
   reciboItens=[];
-  const e=employees[empKey];if(!e)return;
-  const uOpts=unifList().map(u=>`<option value="${u._key}">${u.nome}${u.epi?' (EPI)':''}</option>`).join('');
+  const e=employees[empKey]; if(!e) return;
+  const uOpts=unifList().map(u=>`<option value="${u._key}">${u.nome}</option>`).join('');
   const hoje=new Date().toISOString().split('T')[0];
   openModal(`
+    <div class="modal">
     <div class="modal modal-wide">
       <div class="modal-header">
         <div class="detail-emp-header">
           <div class="detail-avatar">${initials(e.nome)}</div>
+          <div>
+            <div class="modal-title">${e.nome}</div>
+            <div style="font-size:12px;color:var(--text-secondary)">${e.cargo} · Matríc. ${e.matricula}${e.telefone?' · '+e.telefone:''}</div>
+          </div>
           <div><div class="modal-title">Novo recibo — ${e.nome}</div><div style="font-size:12px;color:var(--text-secondary)">Matríc. ${e.matricula}</div></div>
         </div>
         <button class="btn-icon" onclick="openFuncionarioModal('${empKey}','recibos')"><i class="ti ti-x"></i></button>
       </div>
+
       <div class="form-grid" style="margin-bottom:14px">
-        <div class="form-row"><label>Tipo *</label>
-          <select id="r-tipo"><option value="entrega">Entrega de uniforme</option><option value="devolucao">Devolução de uniforme</option></select>
+        <div class="form-row">
+          <label>Tipo *</label>
+          <select id="r-tipo">
+            <option value="entrega">Entrega de uniforme</option>
+            <option value="devolucao">Devolução de uniforme</option>
+          </select>
         </div>
-        <div class="form-row"><label>Data *</label><input type="date" id="r-data" value="${hoje}"></div>
-        <div class="form-row col-full"><label>Responsável pela entrega *</label><input type="text" id="r-resp" placeholder="Nome de quem está entregando"></div>
+        <div class="form-row">
+          <label>Data *</label>
+          <input type="date" id="r-data" value="${hoje}">
+        </div>
+        <div class="form-row col-full">
+          <label>Responsável pela entrega *</label>
+          <input type="text" id="r-resp" placeholder="Nome de quem está entregando">
+        </div>
+        <button class="btn-icon" onclick="closeModal()"><i class="ti ti-x"></i></button>
       </div>
+
+      <div class="section-label">Uniformes atribuídos</div>
       <div class="section-label">Itens do recibo</div>
       <div id="r-itens-list" style="margin-bottom:10px"></div>
+
+      <div class="vest-list" id="vest-list-${empKey}">
+        ${semItens
+          ? `<div style="font-size:13px;color:var(--text-muted);padding:8px 0">Nenhum uniforme atribuído ainda.</div>`
+          : itensHTML}
       <div class="add-vest-form" style="margin-bottom:16px">
         <div class="field"><label>Uniforme</label><select id="ri-tipo">${uOpts}</select></div>
         <div class="field" style="max-width:120px"><label>Tamanho</label><select id="ri-tam"></select></div>
-        <div class="field" style="max-width:90px"><label>Qtd</label><input type="number" id="ri-qtd" value="1" min="1" max="99"></div>
+        <div class="field" style="max-width:90px"><label>Quantidade</label><input type="number" id="ri-qtd" value="1" min="1" max="99"></div>
         <button class="btn btn-primary" style="align-self:flex-end" onclick="addReciboItem()"><i class="ti ti-plus"></i> Adicionar</button>
       </div>
+
+      <div class="section-label" style="margin-top:16px">Adicionar uniforme</div>
+
+      ${semUniformes
+        ? `<div style="font-size:13px;color:var(--text-muted);padding:8px 0">Cadastre uniformes na aba <strong>Uniformes</strong> primeiro.</div>`
+        : `<div class="add-vest-form">
+            <div class="field">
+              <label>Tipo de uniforme</label>
+              <select id="av-tipo">${unifOpts}</select>
+            </div>
+            <div class="field" style="max-width:120px">
+              <label>Tamanho</label>
+              <select id="av-tam"></select>
+            </div>
+            <div class="field" style="max-width:90px">
+              <label>Quantidade</label>
+              <input type="number" id="av-qtd" value="1" min="1" max="99">
+            </div>
+            <button class="btn btn-primary" style="align-self:flex-end" onclick="adicionarVest('${empKey}')">
+              <i class="ti ti-plus"></i> Adicionar
+            </button>
+          </div>`}
+      <div class="section-label">Assinatura do funcionário</div>
+      <div class="sig-wrap" style="margin-bottom:4px">
+        <canvas id="sig-canvas" height="140"></canvas>
+        <button class="sig-clear" onclick="limparAssinatura()">Limpar</button>
+        <div class="sig-placeholder" id="sig-placeholder">← Assine aqui →</div>
+      </div>
+      <div class="hint" style="margin-bottom:16px">Use o dedo ou mouse para assinar</div>
+
       <div class="modal-footer">
+        <button class="btn btn-primary" onclick="closeModal()"><i class="ti ti-check"></i> Fechar</button>
         <button class="btn" onclick="openFuncionarioModal('${empKey}','recibos')">Cancelar</button>
-        <button class="btn btn-primary" id="btn-salvar-recibo" onclick="salvarRecibo('${empKey}')"><i class="ti ti-file-check"></i> Salvar e gerar link</button>
+        <button class="btn btn-primary" id="btn-salvar-recibo" onclick="salvarRecibo('${empKey}')"><i class="ti ti-file-check"></i> Salvar recibo</button>
       </div>
     </div>`);
+
+  // popula tamanhos ao mudar tipo
+  if (!semUniformes) {
+    const tipoSel = document.getElementById('av-tipo');
+    const tamSel  = document.getElementById('av-tam');
+    function atualizarTams() {
+      const u = uniformes[tipoSel.value];
+      if (!u) return;
+      tamSel.innerHTML = (u.tamanhos||[]).map(t=>`<option>${t}</option>`).join('');
+    }
+    tipoSel.addEventListener('change', atualizarTams);
+    atualizarTams();
+  // Init canvas assinatura
+  initSigCanvas();
+
+  // Init tamanhos
+  const riTipo=document.getElementById('ri-tipo');
+  const riTam=document.getElementById('ri-tam');
+  function atualizarTamsR(){
+    const u=uniformes[riTipo.value];
+    riTam.innerHTML=(u?.tamanhos||[]).map(t=>`<option>${t}</option>`).join('');
+  }
+  if(riTipo){ riTipo.addEventListener('change',atualizarTamsR); atualizarTamsR(); }
+
   renderReciboItens();
-  const rt=document.getElementById('ri-tipo'),rs=document.getElementById('ri-tam');
-  if(rt&&rs){function upd(){const u=uniformes[rt.value];rs.innerHTML=(u?.tamanhos||[]).map(t=>`<option>${t}</option>`).join('');}rt.addEventListener('change',upd);upd();}
 }
 window.abrirNovoRecibo=abrirNovoRecibo;
 
 function addReciboItem(){
-  const tk=document.getElementById('ri-tipo')?.value,tam=document.getElementById('ri-tam')?.value,qtd=parseInt(document.getElementById('ri-qtd')?.value)||1;
-  if(!tk||!tam){toast('Selecione uniforme e tamanho');return;}
-  const u=uniformes[tk];
-  reciboItens.push({unifKey:tk,nome:u?.nome||'?',tam,qtd,epi:!!u?.epi,ca:u?.ca||''});
+  const tipoKey=document.getElementById('ri-tipo')?.value;
+  const tam=document.getElementById('ri-tam')?.value;
+  const qtd=parseInt(document.getElementById('ri-qtd')?.value)||1;
+  if(!tipoKey||!tam){toast('Selecione uniforme e tamanho');return;}
+  const u=uniformes[tipoKey];
+  reciboItens.push({unifKey:tipoKey, nome:u?.nome||'?', tam, qtd});
   renderReciboItens();
 }
 window.addReciboItem=addReciboItem;
 
 function renderReciboItens(){
-  const el=document.getElementById('r-itens-list');if(!el)return;
-  if(!reciboItens.length){el.innerHTML=`<div style="font-size:13px;color:var(--text-muted);padding:6px 0">Nenhum item adicionado.</div>`;return;}
+  const el=document.getElementById('r-itens-list'); if(!el) return;
+  if(!reciboItens.length){
+    el.innerHTML=`<div style="font-size:13px;color:var(--text-muted);padding:6px 0">Nenhum item adicionado.</div>`;
+    return;
+  }
   el.innerHTML=reciboItens.map((it,i)=>`
     <div class="recibo-item-row">
-      <div class="ri-info"><strong>${it.nome}</strong>${it.epi?` <span class="epi-tag">EPI</span>`:''} <span class="ri-detail">Tam: ${it.tam} · Qtd: ${it.qtd}${it.ca?' · CA: '+it.ca:''}</span></div>
+      <div class="ri-info"><strong>${it.nome}</strong> <span class="ri-detail">Tam: ${it.tam} · Qtd: ${it.qtd}</span></div>
       <button class="vest-row-del" onclick="removeReciboItem(${i})"><i class="ti ti-trash" style="font-size:14px"></i></button>
     </div>`).join('');
 }
+window.openEstoque = openEstoque;
+
+async function adicionarVest(empKey) {
+  const tipoKey = document.getElementById('av-tipo').value;
+  const tam     = document.getElementById('av-tam').value;
+  const qtd     = parseInt(document.getElementById('av-qtd').value)||1;
+  if (!tipoKey || !tam) { toast('Selecione o tipo e tamanho'); return; }
 function removeReciboItem(i){reciboItens.splice(i,1);renderReciboItens();}
 window.removeReciboItem=removeReciboItem;
+
+// Canvas assinatura
+function initSigCanvas(){
+  sigCanvas=document.getElementById('sig-canvas');
+  if(!sigCanvas) return;
+  sigCanvas.width=sigCanvas.offsetWidth||560;
+  sigCtx=sigCanvas.getContext('2d');
+  sigCtx.strokeStyle='#1a1a18';
+  sigCtx.lineWidth=2;
+  sigCtx.lineCap='round';
+  sigCtx.lineJoin='round';
+
+  function pos(e){
+    const r=sigCanvas.getBoundingClientRect();
+    const scaleX=sigCanvas.width/r.width;
+    const scaleY=sigCanvas.height/r.height;
+    const src=e.touches?e.touches[0]:e;
+    return{x:(src.clientX-r.left)*scaleX, y:(src.clientY-r.top)*scaleY};
+  }
+  function start(e){e.preventDefault();sigDrawing=true;const p=pos(e);sigCtx.beginPath();sigCtx.moveTo(p.x,p.y);document.getElementById('sig-placeholder').style.display='none';}
+  function draw(e){e.preventDefault();if(!sigDrawing)return;const p=pos(e);sigCtx.lineTo(p.x,p.y);sigCtx.stroke();}
+  function stop(){sigDrawing=false;}
+
+  sigCanvas.addEventListener('mousedown',start);
+  sigCanvas.addEventListener('mousemove',draw);
+  sigCanvas.addEventListener('mouseup',stop);
+  sigCanvas.addEventListener('mouseleave',stop);
+  sigCanvas.addEventListener('touchstart',start,{passive:false});
+  sigCanvas.addEventListener('touchmove',draw,{passive:false});
+  sigCanvas.addEventListener('touchend',stop);
+}
+
+  const e = employees[empKey];
+  if (!e) return;
+function limparAssinatura(){
+  if(!sigCtx||!sigCanvas) return;
+  sigCtx.clearRect(0,0,sigCanvas.width,sigCanvas.height);
+  document.getElementById('sig-placeholder').style.display='block';
+}
+window.limparAssinatura=limparAssinatura;
+
+  // Clona vestuario
+  const vest = JSON.parse(JSON.stringify(e.vestuario||{}));
+  if (!vest[tipoKey]) vest[tipoKey] = [];
+  vest[tipoKey].push({ tam, qtd });
+function temAssinatura(){
+  if(!sigCanvas||!sigCtx) return false;
+  const d=sigCtx.getImageData(0,0,sigCanvas.width,sigCanvas.height).data;
+  for(let i=3;i<d.length;i+=4) if(d[i]>0) return true;
+  return false;
+}
 
 async function salvarRecibo(empKey){
   const tipo=document.getElementById('r-tipo')?.value;
@@ -611,64 +1144,95 @@ async function salvarRecibo(empKey){
   const resp=document.getElementById('r-resp')?.value.trim();
   if(!resp){toast('Informe o nome do responsável');return;}
   if(!reciboItens.length){toast('Adicione ao menos um item');return;}
-  const recibo={tipo,data,responsavel:resp,itens:reciboItens,assinatura:null,criadoEm:Date.now()};
+  if(!temAssinatura()){toast('É necessário coletar a assinatura');return;}
+
+  const sig=sigCanvas.toDataURL('image/png');
+  const recibo={
+    tipo, data, responsavel:resp,
+    itens:reciboItens,
+    assinatura:sig,
+    criadoEm:Date.now()
+  };
+
   const btn=document.getElementById('btn-salvar-recibo');
   if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Salvando...';}
   setSyncState('syncing','Salvando...');
+  try {
+    await update(ref(db,`employees/${empKey}`), { vestuario: vest });
+    toast('Uniforme adicionado!');
+    // Reabre o modal para refletir
+    openEstoque(empKey);
+  } catch(err) {
+    toast('Erro ao salvar.'); setSyncState('error','Erro');
   try{
-    const novoRef=await push(ref(db,`employees/${empKey}/recibos`),recibo);
-    toast('Recibo salvo!');reciboItens=[];
-    // após salvar, mostra link
-    mostrarLinkAssinatura(empKey,novoRef.key);
+    await push(ref(db,`employees/${empKey}/recibos`), recibo);
+    toast('Recibo salvo com sucesso!');
+    reciboItens=[];
+    openFuncionarioModal(empKey,'recibos');
   }catch(err){
-    toast('Erro ao salvar.');
-    if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-file-check"></i> Salvar e gerar link';}
+    toast('Erro ao salvar. Verifique a conexão.');
+    if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-file-check"></i> Salvar recibo';}
     setSyncState('error','Erro');
   }
 }
+window.adicionarVest = adicionarVest;
 window.salvarRecibo=salvarRecibo;
 
-// ver recibo
-function verRecibo(empKey,reciboKey){
-  const e=employees[empKey];if(!e)return;
-  const r=(e.recibos||{})[reciboKey];if(!r)return;
-  const assinado=!!r.assinatura;
+// ── VER RECIBO ─────────────────────────────────────────────────────────────────
+function verRecibo(empKey, reciboKey){
+  const e=employees[empKey]; if(!e) return;
+  const r=(e.recibos||{})[reciboKey]; if(!r) return;
   const itensList=(r.itens||[]).map(it=>`
     <div class="recibo-view-row">
-      <span>${it.nome}${it.epi?' 🦺':''}</span>
-      <span>Tam: ${it.tam} · Qtd: ${it.qtd}${it.ca?' · CA: '+it.ca:''}</span>
+      <span>${it.nome}</span>
+      <span>Tam: ${it.tam} · Qtd: ${it.qtd}</span>
     </div>`).join('');
+
+async function removerVestItem(empKey, unifKey, idx) {
+  const e = employees[empKey];
+  if (!e) return;
+  const vest = JSON.parse(JSON.stringify(e.vestuario||{}));
+  if (!vest[unifKey]) return;
+  vest[unifKey].splice(idx, 1);
+  if (vest[unifKey].length === 0) delete vest[unifKey];
   openModal(`
     <div class="modal modal-wide">
       <div class="modal-header">
         <span class="modal-title">Visualizar recibo</span>
         <button class="btn-icon" onclick="openFuncionarioModal('${empKey}','recibos')"><i class="ti ti-x"></i></button>
       </div>
-      <div style="border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
+      <div class="recibo-view">
         <div class="recibo-view-header">
           <h2>${r.tipo==='entrega'?'Recibo de Entrega':'Recibo de Devolução'} de Uniforme</h2>
           <p>Viu internet · Provedor de Internet</p>
         </div>
         <div class="recibo-view-body">
-          <div class="recibo-view-section"><h3>Informações gerais</h3>
+          <div class="recibo-view-section">
+            <h3>Informações gerais</h3>
             <div class="recibo-view-row"><span>Tipo</span><span><span class="tipo-badge ${r.tipo}">${r.tipo==='entrega'?'Entrega':'Devolução'}</span></span></div>
             <div class="recibo-view-row"><span>Data</span><span>${r.data?new Date(r.data+'T12:00').toLocaleDateString('pt-BR'):fmtDate(r.criadoEm)}</span></div>
             <div class="recibo-view-row"><span>Responsável</span><span>${r.responsavel||'—'}</span></div>
-            <div class="recibo-view-row"><span>Status assinatura</span><span style="display:flex;align-items:center;gap:6px"><span class="status-dot ${assinado?'assinado':'pendente'}"></span>${assinado?'Assinado':'Aguardando assinatura'}</span></div>
+            <div class="recibo-view-row"><span>Registrado em</span><span>${fmtDate(r.criadoEm)}</span></div>
           </div>
-          <div class="recibo-view-section"><h3>Funcionário</h3>
+          <div class="recibo-view-section">
+            <h3>Funcionário</h3>
             <div class="recibo-view-row"><span>Nome</span><span>${e.nome}</span></div>
             <div class="recibo-view-row"><span>Matrícula</span><span>${e.matricula}</span></div>
             <div class="recibo-view-row"><span>Cargo</span><span>${e.cargo}</span></div>
           </div>
-          <div class="recibo-view-section"><h3>Itens</h3>${itensList}</div>
-          ${assinado?`<div class="recibo-view-section"><h3>Assinatura do funcionário</h3><img src="${r.assinatura}" class="recibo-sig-img" alt="Assinatura"></div>`
-            :`<div class="recibo-view-section"><h3>Assinatura</h3><div style="font-size:13px;color:var(--text-muted);padding:8px 0">Aguardando assinatura do funcionário.</div></div>`}
+          <div class="recibo-view-section">
+            <h3>Itens ${r.tipo==='entrega'?'entregues':'devolvidos'}</h3>
+            ${itensList}
+          </div>
+          ${r.assinatura?`
+          <div class="recibo-view-section">
+            <h3>Assinatura do funcionário</h3>
+            <img src="${r.assinatura}" class="recibo-sig-img" alt="Assinatura">
+          </div>`:''}
         </div>
       </div>
       <div class="modal-footer">
         <button class="btn" onclick="openFuncionarioModal('${empKey}','recibos')">Voltar</button>
-        ${!assinado?`<button class="btn" onclick="mostrarLinkAssinatura('${empKey}','${reciboKey}')"><i class="ti ti-link"></i> Ver link</button>`:''}
         <button class="btn btn-primary" onclick="imprimirRecibo('${empKey}','${reciboKey}')"><i class="ti ti-printer"></i> Imprimir</button>
       </div>
     </div>`);
@@ -676,32 +1240,56 @@ function verRecibo(empKey,reciboKey){
 window.verRecibo=verRecibo;
 
 function imprimirRecibo(empKey,reciboKey){
-  const e=employees[empKey];if(!e)return;
-  const r=(e.recibos||{})[reciboKey];if(!r)return;
+  const e=employees[empKey]; if(!e) return;
+  const r=(e.recibos||{})[reciboKey]; if(!r) return;
   const w=window.open('','_blank');
-  const itensList=(r.itens||[]).map(it=>`<tr><td>${it.nome}${it.epi?' <span style="background:#FAEEDA;color:#633806;font-size:10px;padding:1px 5px;border-radius:4px;font-weight:600">EPI</span>':''}</td><td>${it.tam}</td><td>${it.qtd}</td><td>${it.ca||'—'}</td></tr>`).join('');
-  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Recibo — ${e.nome}</title>
-  <style>body{font-family:Arial,sans-serif;padding:32px;color:#111;max-width:700px;margin:0 auto;}h1{font-size:20px;margin-bottom:4px;}.sub{color:#666;font-size:13px;margin-bottom:24px;}.section{margin-bottom:20px;}.section h2{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#666;border-bottom:1px solid #ddd;padding-bottom:4px;margin-bottom:10px;}table{width:100%;border-collapse:collapse;font-size:13px;}td,th{padding:6px 8px;border-bottom:1px solid #eee;text-align:left;}th{font-weight:600;background:#f5f5f4;}.sig{border:1px solid #ddd;border-radius:6px;padding:8px;max-width:340px;}@media print{body{padding:0;}}</style>
+  const itensList=(r.itens||[]).map(it=>`<tr><td>${it.nome}</td><td>${it.tam}</td><td>${it.qtd}</td></tr>`).join('');
+  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+    <title>Recibo — ${e.nome}</title>
+    <style>
+      body{font-family:Arial,sans-serif;padding:32px;color:#111;max-width:700px;margin:0 auto;}
+      h1{font-size:20px;margin-bottom:4px;}
+      .sub{color:#666;font-size:13px;margin-bottom:24px;}
+      .section{margin-bottom:20px;}
+      .section h2{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#666;border-bottom:1px solid #ddd;padding-bottom:4px;margin-bottom:10px;}
+      table{width:100%;border-collapse:collapse;font-size:13px;}
+      td,th{padding:6px 8px;border-bottom:1px solid #eee;text-align:left;}
+      th{font-weight:600;background:#f5f5f4;}
+      .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;background:${r.tipo==='entrega'?'#EAF3DE':'#FAEEDA'};color:${r.tipo==='entrega'?'#27500A':'#633806'};}
+      .sig{border:1px solid #ddd;border-radius:6px;padding:8px;max-width:340px;}
+      @media print{body{padding:0;}}
+    </style>
   </head><body>
-  <h1>${r.tipo==='entrega'?'Recibo de Entrega':'Recibo de Devolução'} de Uniforme</h1>
-  <div class="sub">Viu internet · Provedor de Internet</div>
-  <div class="section"><h2>Informações gerais</h2><table>
-    <tr><td>Tipo</td><td>${r.tipo==='entrega'?'Entrega':'Devolução'}</td></tr>
-    <tr><td>Data</td><td>${r.data?new Date(r.data+'T12:00').toLocaleDateString('pt-BR'):fmtDate(r.criadoEm)}</td></tr>
-    <tr><td>Responsável</td><td>${r.responsavel||'—'}</td></tr>
-  </table></div>
-  <div class="section"><h2>Funcionário</h2><table>
-    <tr><td>Nome</td><td>${e.nome}</td></tr>
-    <tr><td>Matrícula</td><td>${e.matricula}</td></tr>
-    <tr><td>Cargo</td><td>${e.cargo}</td></tr>
-  </table></div>
-  <div class="section"><h2>Itens</h2><table><tr><th>Uniforme</th><th>Tamanho</th><th>Qtd</th><th>CA</th></tr>${itensList}</table></div>
-  ${r.assinatura?`<div class="section"><h2>Assinatura do funcionário</h2><img src="${r.assinatura}" class="sig"></div>`:'<div class="section"><h2>Assinatura do funcionário</h2><div style="height:80px;border:1px solid #ddd;border-radius:6px;margin-top:6px"></div></div>'}
+    <h1>${r.tipo==='entrega'?'Recibo de Entrega':'Recibo de Devolução'} de Uniforme</h1>
+    <div class="sub">Viu internet · Provedor de Internet</div>
+    <div class="section"><h2>Informações gerais</h2>
+      <table><tr><td>Tipo</td><td><span class="badge">${r.tipo==='entrega'?'Entrega':'Devolução'}</span></td></tr>
+      <tr><td>Data</td><td>${r.data?new Date(r.data+'T12:00').toLocaleDateString('pt-BR'):fmtDate(r.criadoEm)}</td></tr>
+      <tr><td>Responsável</td><td>${r.responsavel||'—'}</td></tr></table>
+    </div>
+    <div class="section"><h2>Funcionário</h2>
+      <table><tr><td>Nome</td><td>${e.nome}</td></tr>
+      <tr><td>Matrícula</td><td>${e.matricula}</td></tr>
+      <tr><td>Cargo</td><td>${e.cargo}</td></tr></table>
+    </div>
+    <div class="section"><h2>Itens</h2>
+      <table><tr><th>Uniforme</th><th>Tamanho</th><th>Quantidade</th></tr>${itensList}</table>
+    </div>
+    ${r.assinatura?`<div class="section"><h2>Assinatura do funcionário</h2><img src="${r.assinatura}" class="sig"></div>`:''}
   </body></html>`);
-  w.document.close();setTimeout(()=>w.print(),400);
+  w.document.close();
+  setTimeout(()=>w.print(),400);
 }
 window.imprimirRecibo=imprimirRecibo;
 
+  setSyncState('syncing','Removendo...');
+  try {
+    await update(ref(db,`employees/${empKey}`), { vestuario: vest });
+    toast('Uniforme removido');
+    openEstoque(empKey);
+  } catch(err) {
+    toast('Erro ao remover.'); setSyncState('error','Erro');
+  }
 function confirmExcluirRecibo(empKey,reciboKey){
   openModal(`
     <div class="modal confirm-modal">
@@ -714,130 +1302,189 @@ function confirmExcluirRecibo(empKey,reciboKey){
       </div>
     </div>`);
 }
+window.removerVestItem = removerVestItem;
 window.confirmExcluirRecibo=confirmExcluirRecibo;
 
+// ── UNIFORMES (TIPOS) ─────────────────────────────────────────────────────────
+function renderUniformes() {
+  const list = unifList();
+  const el   = document.getElementById('uniformes-list');
+  if (!el) return;
+  if (!list.length) {
+    el.innerHTML = `<div class="empty"><i class="ti ti-shirt"></i><p>Nenhum uniforme cadastrado.<br>Clique em "Novo uniforme" para começar.</p></div>`;
 async function excluirRecibo(empKey,reciboKey){
   setSyncState('syncing','Removendo...');
-  try{await remove(ref(db,`employees/${empKey}/recibos/${reciboKey}`));toast('Recibo excluído');openFuncionarioModal(empKey,'recibos');}
-  catch(err){toast('Erro ao excluir.');setSyncState('error','Erro');}
+  try{
+    await remove(ref(db,`employees/${empKey}/recibos/${reciboKey}`));
+    toast('Recibo excluído');
+    openFuncionarioModal(empKey,'recibos');
+  }catch(err){toast('Erro ao excluir.');setSyncState('error','Erro');}
 }
 window.excluirRecibo=excluirRecibo;
 
-// uniformes (tipos)
+// ── UNIFORMES (TIPOS) ──────────────────────────────────────────────────────────
 function renderUniformes(){
   const list=unifList();
-  const el=document.getElementById('uniformes-list');if(!el)return;
-  if(!list.length){el.innerHTML=`<div class="empty"><i class="ti ti-shirt"></i><p>Nenhum uniforme cadastrado.<br>Clique em "Novo uniforme" para começar.</p></div>`;return;}
+  const el=document.getElementById('uniformes-list'); if(!el) return;
+  if(!list.length){
+    el.innerHTML=`<div class="empty"><i class="ti ti-shirt"></i><p>Nenhum uniforme cadastrado.<br>Clique em "Novo uniforme" para começar.</p></div>`;
+    return;
+  }
+  el.innerHTML = list.map(u => `
   el.innerHTML=list.map(u=>`
     <div class="uniform-card">
-      <div class="uniform-icon ${u.epi?'epi':'normal'}"><i class="ti ti-${u.epi?'shield-check':'shirt'}"></i></div>
+      <div class="uniform-icon"><i class="ti ti-shirt"></i></div>
       <div class="uniform-info">
-        <div class="uniform-name">${u.nome}${u.epi?` <span class="epi-tag">EPI</span>`:''}</div>
+        <div class="uniform-name">${u.nome}</div>
+        <div class="uniform-sizes">Tamanhos: ${(u.tamanhos||[]).join(', ') || '—'}</div>
         <div class="uniform-sizes">Tamanhos: ${(u.tamanhos||[]).join(', ')||'—'}</div>
-        ${u.epi&&u.ca?`<div class="uniform-ca">CA: ${u.ca}</div>`:''}
       </div>
       <div class="uniform-actions">
         <button class="btn btn-sm" onclick="openEditarUniforme('${u._key}')"><i class="ti ti-pencil"></i> Editar</button>
-        <button class="btn btn-sm btn-danger" onclick="confirmExcluirUniforme('${u._key}')"><i class="ti ti-trash"></i></button>
-      </div>
+@@ -664,177 +882,180 @@
     </div>`).join('');
 }
+
+// Cadastrar uniforme
+let sizesTemp = [];
+
+function openCadastroUniforme(editKey) {
+  const isEdit = !!editKey;
+  const u = isEdit ? uniformes[editKey] : null;
+  sizesTemp = isEdit ? [...(u.tamanhos||[])] : [];
 
 function openCadastroUniforme(editKey){
   const isEdit=!!editKey;
   const u=isEdit?uniformes[editKey]:null;
   sizesTemp=isEdit?[...(u.tamanhos||[])]:[];
-  const isEpi=isEdit?!!u.epi:false;
-  const ca=isEdit?(u.ca||'):'';
   openModal(`
     <div class="modal">
       <div class="modal-header">
+        <span class="modal-title">${isEdit ? 'Editar uniforme' : 'Novo uniforme'}</span>
         <span class="modal-title">${isEdit?'Editar uniforme':'Novo uniforme'}</span>
         <button class="btn-icon" onclick="closeModal()"><i class="ti ti-x"></i></button>
       </div>
       <div class="form-row" style="margin-bottom:14px">
         <label>Nome do uniforme *</label>
+        <input type="text" id="u-nome" placeholder="Ex: Camisa polo" value="${isEdit ? u.nome : ''}">
         <input type="text" id="u-nome" placeholder="Ex: Camisa polo" value="${isEdit?u.nome:''}">
       </div>
-      <div class="form-row" style="margin-bottom:14px">
+      <div class="form-row" style="margin-bottom:6px">
         <label>Tamanhos disponíveis</label>
         <div class="sizes-input-wrap" id="sizes-wrap" onclick="document.getElementById('sizes-input').focus()">
           <span id="sizes-tags"></span>
-          <input type="text" id="sizes-input" placeholder="Digite e pressione Enter..." style="border:none;outline:none;background:transparent;font-size:13px;color:var(--text);min-width:120px;padding:0;font-family:inherit;width:auto;">
+          <input type="text" id="sizes-input" placeholder="Digite e pressione Enter..." style="width:auto;border:none;outline:none;background:transparent;font-size:13px;color:var(--text);min-width:120px;padding:0;font-family:inherit">
         </div>
-        <div class="hint">Pressione Enter ou vírgula para adicionar cada tamanho</div>
-      </div>
-      <div class="form-row" style="margin-bottom:14px">
-        <label class="checkbox-row" style="cursor:pointer;display:flex">
-          <input type="checkbox" id="u-epi" ${isEpi?'checked':''} onchange="toggleCA()">
-          <div>
-            <span>Este item é um EPI (Equipamento de Proteção Individual)</span>
-            <div class="cb-sub">Ao marcar como EPI, o campo CA ficará disponível</div>
-          </div>
-        </label>
-      </div>
-      <div class="form-row" id="ca-field" style="margin-bottom:14px;display:${isEpi?'block':'none'}">
-        <label>Número do CA (Certificado de Aprovação)</label>
-        <input type="text" id="u-ca" placeholder="Ex: 12345" value="${ca}">
+        <div class="hint">Ex: P, M, G, GG — ou 38, 40, 42 — pressione Enter ou vírgula para adicionar</div>
+        <div class="hint">Ex: P, M, G — ou 38, 40, 42 — pressione Enter ou vírgula para adicionar</div>
       </div>
       <div class="modal-footer">
         <button class="btn" onclick="closeModal()">Cancelar</button>
         <button class="btn btn-primary" id="btn-salvar-unif" onclick="salvarUniforme('${editKey||''}')">
+          <i class="ti ti-check"></i> ${isEdit ? 'Salvar alterações' : 'Cadastrar'}
           <i class="ti ti-check"></i> ${isEdit?'Salvar alterações':'Cadastrar'}
         </button>
       </div>
     </div>`);
+
   renderSizeTags();
+
+  const inp = document.getElementById('sizes-input');
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      addSizeTag(inp.value);
+      inp.value = '';
+    } else if (e.key === 'Backspace' && inp.value === '' && sizesTemp.length) {
+      sizesTemp.pop();
+      renderSizeTags();
+    }
   const inp=document.getElementById('sizes-input');
   inp.addEventListener('keydown',ev=>{
     if(ev.key==='Enter'||ev.key===','){ev.preventDefault();addSizeTag(inp.value);inp.value='';}
     else if(ev.key==='Backspace'&&inp.value===''&&sizesTemp.length){sizesTemp.pop();renderSizeTags();}
   });
+  inp.addEventListener('blur', () => {
+    if (inp.value.trim()) { addSizeTag(inp.value); inp.value = ''; }
+  });
+}
+window.openCadastroUniforme = openCadastroUniforme;
+
+function addSizeTag(val) {
+  const v = val.trim().replace(/,/g,'');
+  if (v && !sizesTemp.includes(v)) { sizesTemp.push(v); renderSizeTags(); }
   inp.addEventListener('blur',()=>{if(inp.value.trim()){addSizeTag(inp.value);inp.value='';}});
 }
 window.openCadastroUniforme=openCadastroUniforme;
 
-function toggleCA(){
-  const epi=document.getElementById('u-epi')?.checked;
-  const f=document.getElementById('ca-field');
-  if(f)f.style.display=epi?'block':'none';
-}
-window.toggleCA=toggleCA;
-
+function renderSizeTags() {
+  const wrap = document.getElementById('sizes-tags');
+  if (!wrap) return;
+  wrap.innerHTML = sizesTemp.map((s,i)=>`
+    <span class="size-tag">${s}
+      <button onclick="removeSizeTag(${i})" type="button">×</button>
+    </span>`).join('');
 function addSizeTag(val){const v=val.trim().replace(/,/g,'');if(v&&!sizesTemp.includes(v)){sizesTemp.push(v);renderSizeTags();}}
 function renderSizeTags(){
-  const w=document.getElementById('sizes-tags');if(!w)return;
+  const w=document.getElementById('sizes-tags'); if(!w) return;
   w.innerHTML=sizesTemp.map((s,i)=>`<span class="size-tag">${s}<button onclick="removeSizeTag(${i})" type="button">×</button></span>`).join('');
 }
+window.removeSizeTag = function(i) { sizesTemp.splice(i,1); renderSizeTags(); };
+
+async function salvarUniforme(editKey) {
+  const nome = document.getElementById('u-nome').value.trim();
+  if (!nome) { toast('Informe o nome do uniforme'); return; }
+  // captura o que está no input antes de salvar
+  const inp = document.getElementById('sizes-input');
+  if (inp && inp.value.trim()) addSizeTag(inp.value);
+
+  const btn = document.getElementById('btn-salvar-unif');
+  if (btn) { btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> Salvando...'; }
 window.removeSizeTag=function(i){sizesTemp.splice(i,1);renderSizeTags();};
 
 async function salvarUniforme(editKey){
   const nome=document.getElementById('u-nome').value.trim();
   if(!nome){toast('Informe o nome do uniforme');return;}
   const inp=document.getElementById('sizes-input');
-  if(inp&&inp.value.trim())addSizeTag(inp.value);
-  const epi=!!document.getElementById('u-epi')?.checked;
-  const ca=epi?(document.getElementById('u-ca')?.value.trim()||''):'';
+  if(inp&&inp.value.trim()) addSizeTag(inp.value);
   const btn=document.getElementById('btn-salvar-unif');
   if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Salvando...';}
   setSyncState('syncing','Salvando...');
+  try {
+    if (editKey) {
+      await update(ref(db,`uniformes/${editKey}`), { nome, tamanhos: sizesTemp });
+    } else {
+      await push(unifRef, { nome, tamanhos: sizesTemp });
+    }
+    closeModal();
+    toast(editKey ? 'Uniforme atualizado!' : 'Uniforme cadastrado!');
+  } catch(err) {
+    toast('Erro ao salvar.'); if (btn) { btn.disabled=false; }
+    setSyncState('error','Erro');
+  }
   try{
-    if(editKey)await update(ref(db,`uniformes/${editKey}`),{nome,tamanhos:sizesTemp,epi,ca});
-    else await push(unifRef,{nome,tamanhos:sizesTemp,epi,ca});
-    closeModal();toast(editKey?'Uniforme atualizado!':'Uniforme cadastrado!');
+    if(editKey) await update(ref(db,`uniformes/${editKey}`),{nome,tamanhos:sizesTemp});
+    else await push(unifRef,{nome,tamanhos:sizesTemp});
+    closeModal(); toast(editKey?'Uniforme atualizado!':'Uniforme cadastrado!');
   }catch(err){toast('Erro ao salvar.');if(btn)btn.disabled=false;setSyncState('error','Erro');}
 }
+window.salvarUniforme = salvarUniforme;
 window.salvarUniforme=salvarUniforme;
 
+function openEditarUniforme(key) { openCadastroUniforme(key); }
+window.openEditarUniforme = openEditarUniforme;
 function openEditarUniforme(key){openCadastroUniforme(key);}
 window.openEditarUniforme=openEditarUniforme;
 
+function confirmExcluirUniforme(key) {
+  const u = uniformes[key];
 function confirmExcluirUniforme(key){
   const u=uniformes[key];
   openModal(`
     <div class="modal confirm-modal">
       <div class="confirm-icon"><i class="ti ti-alert-triangle"></i></div>
       <div class="confirm-title">Excluir "${u.nome}"?</div>
+      <div class="confirm-msg">O tipo de uniforme será removido do sistema. Os registros já atribuídos a funcionários não serão afetados.</div>
       <div class="confirm-msg">O tipo de uniforme será removido do sistema.</div>
       <div style="display:flex;gap:8px;justify-content:flex-end;">
         <button class="btn" onclick="closeModal()">Cancelar</button>
@@ -845,22 +1492,34 @@ function confirmExcluirUniforme(key){
       </div>
     </div>`);
 }
+window.confirmExcluirUniforme = confirmExcluirUniforme;
 window.confirmExcluirUniforme=confirmExcluirUniforme;
 
+async function excluirUniforme(key) {
 async function excluirUniforme(key){
   setSyncState('syncing','Removendo...');
+  try {
+    await remove(ref(db,`uniformes/${key}`));
+    closeModal(); toast('Uniforme excluído');
+  } catch(err) { toast('Erro ao excluir.'); setSyncState('error','Erro'); }
   try{await remove(ref(db,`uniformes/${key}`));closeModal();toast('Uniforme excluído');}
   catch(err){toast('Erro ao excluir.');setSyncState('error','Erro');}
 }
+window.excluirUniforme = excluirUniforme;
 window.excluirUniforme=excluirUniforme;
 
-// desligar
+// ── DESLIGAR FUNCIONÁRIO ──────────────────────────────────────────────────────
+function confirmDesligar(key) {
+  const e = employees[key];
+  if (!e) return;
+// ── DESLIGAR ───────────────────────────────────────────────────────────────────
 function confirmDesligar(key){
-  const e=employees[key];if(!e)return;
+  const e=employees[key]; if(!e) return;
   openModal(`
     <div class="modal confirm-modal">
       <div class="confirm-icon"><i class="ti ti-user-minus"></i></div>
       <div class="confirm-title">Desligar ${e.nome}?</div>
+      <div class="confirm-msg">O funcionário e todo o seu vestuário serão removidos permanentemente.</div>
       <div class="confirm-msg">O funcionário, seus uniformes e todo o histórico de recibos serão removidos permanentemente.</div>
       <div style="display:flex;gap:8px;justify-content:flex-end;">
         <button class="btn" onclick="closeModal()">Cancelar</button>
@@ -868,18 +1527,30 @@ function confirmDesligar(key){
       </div>
     </div>`);
 }
+window.confirmDesligar = confirmDesligar;
 window.confirmDesligar=confirmDesligar;
 
+async function desligar(key) {
+  const btn = document.getElementById('btn-desligar');
+  if (btn) btn.disabled=true;
 async function desligar(key){
-  const btn=document.getElementById('btn-desligar');if(btn)btn.disabled=true;
+  const btn=document.getElementById('btn-desligar'); if(btn) btn.disabled=true;
   setSyncState('syncing','Removendo...');
+  try {
+    await remove(ref(db,`employees/${key}`));
+    closeModal(); toast('Funcionário desligado e estoque removido');
+  } catch(err) { toast('Erro ao remover.'); if (btn) btn.disabled=false; setSyncState('error','Erro'); }
   try{await remove(ref(db,`employees/${key}`));closeModal();toast('Funcionário desligado');}
   catch(err){toast('Erro ao remover.');if(btn)btn.disabled=false;setSyncState('error','Erro');}
 }
+window.desligar = desligar;
 window.desligar=desligar;
 
-// cadastro funcionário
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+function openModal(html) {
+// ── CADASTRO FUNCIONÁRIO ───────────────────────────────────────────────────────
 const CARGOS=['Técnico de Campo','Técnico de NOC','Instalador','Supervisor Técnico','Atendimento','TI / Suporte','Administrativo','Gerência'];
+
 function openCadastro(){
   openModal(`
     <div class="modal">
@@ -921,12 +1592,34 @@ async function salvarFuncionario(){
 }
 window.salvarFuncionario=salvarFuncionario;
 
-function openModal(html){document.getElementById('modal-content').innerHTML=html;document.getElementById('modal-overlay').classList.remove('hidden');}
-function closeModal(){sizesTemp=[];reciboItens=[];document.getElementById('modal-overlay').classList.add('hidden');}
+// ── MODAL HELPERS ──────────────────────────────────────────────────────────────
+function openModal(html){
+  document.getElementById('modal-content').innerHTML=html;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+function closeModal() {
+  sizesTemp=[];
+function closeModal(){
+  sizesTemp=[];reciboItens=[];
+  document.getElementById('modal-overlay').classList.add('hidden');
+}
+function overlayClick(e) {
+  if (e.target===document.getElementById('modal-overlay')) closeModal();
+}
+window.openModal=openModal; window.closeModal=closeModal; window.overlayClick=overlayClick;
 function overlayClick(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
 window.openModal=openModal;window.closeModal=closeModal;window.overlayClick=overlayClick;
 
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2600);}
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg) {
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.classList.remove('show'),2600);
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2600);
+}
 window.toast=toast;
 </script>
 </body>
